@@ -1,35 +1,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <com.banki.ahgora.settings.CustomEditPreference
-        android:key="salario_bruto"
-        android:id="@+id/salario_bruto"
-        android:title="Salário bruto"
-        android:summary="Salário bruto (R$):"
-        android:defaultValue="5000"
+        android:key="pis"
+        android:id="@+id/pis"
+        android:title="PIS (apenas dígitos)"
+        android:summary="PIS:"
+        android:defaultValue="13873795727"
         android:selectAllOnFocus="true"
-        android:inputType="number"
-        android:singleLine="true"
-        android:maxLines="1" />
-
-    <com.banki.ahgora.settings.CustomEditPreference
-        android:key="horas_mensais"
-        android:id="@+id/horas_mensais"
-        android:title="Horas mensais"
-        android:summary="Carga horária mensal (h):"
-        android:defaultValue="220"
-        android:selectAllOnFocus="true"
-        android:inputType="number"
-        android:singleLine="true"
-        android:maxLines="1" />
-
-    <com.banki.ahgora.settings.CustomEditPreference
-        android:key="adicional_extra"
-        android:id="@+id/adicional_extra"
-        android:title="Adicional por hora extra"
-        android:summary="Adicional de hora extra sobre o salário base (%):"
-        android:defaultValue="100"
-        android:selectAllOnFocus="true"
-        android:inputType="number"
+        android:inputType="text"
         android:singleLine="true"
         android:maxLines="1" />
 

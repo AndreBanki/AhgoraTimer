@@ -188,7 +188,8 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
     }
 
     private void testeSOAP() {
-        String pis = "13873795727";
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String pis = settings.getString("pis", "");
         RetrieveResultTask task = new RetrieveResultTask(new AsyncResponse() {
             @Override
             public void processFinish(Batidas result) {
