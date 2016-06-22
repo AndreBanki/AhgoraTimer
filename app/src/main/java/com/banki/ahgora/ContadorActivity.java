@@ -1,12 +1,8 @@
 package com.banki.ahgora;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -14,7 +10,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -44,7 +39,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
     private Intent serviceIntent;
     private Snackbar snackbar = null;
     CalculoHoraExtra calculador;
-    private BroadcastReceiver mConnReceiver;
 
     private Batidas batidas = null;
 
@@ -64,20 +58,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
 
         serviceIntent = new Intent(ContadorActivity.this, ContadorService.class);
         startService(serviceIntent);
-
-        mConnReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-               String valor = intent.getStringExtra("valor");
-                if (valor != null) {
-                    int count = Integer.parseInt(valor);
-                    contadorService.setCount(contadorService.getCount()+count);
-                    atualizaResultadoContagem(count);
-                    Toast t = Toast.makeText(ContadorActivity.this, "Ta-daaaa!", Toast.LENGTH_SHORT);
-                    t.show();
-                }
-            }
-        };
     }
 
     private void inicializaBotoes() {
@@ -96,23 +76,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
                 return true;
             }
         });
-    }
-
-    private void criaSnackBarOpcaoDesfazerStop() {
-        final CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
-        final int countToKeep = contadorService.getCount();
-        snackbar = Snackbar
-                .make(coordinatorLayout, "Contador zerado!", Snackbar.LENGTH_INDEFINITE)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        contadorService.setCount(countToKeep);
-                        startService(serviceIntent);
-                        atualizaResultadoContagem(countToKeep);
-                        atualizaBotoes();
-                    }
-                });
-        snackbar.show();
     }
 
     private void inicializaHandler() {
@@ -163,8 +126,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
 
     private void pararContagem() {
         if (contadorService.getCount() > 0) {
-            criaSnackBarOpcaoDesfazerStop();
-
             contadorService.reset();
             stopService(serviceIntent);
 
@@ -193,8 +154,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
         ContadorService.ContadorBinder binder = (ContadorService.ContadorBinder) service;
         contadorService = binder.getContador();
         contadorService.setActivityHandler(activityHandler);
-        registerReceiver(mConnReceiver, new IntentFilter("NOME_DA_ACAO"));
-
         atualizaResultadoContagem(contadorService.getCount());
     }
 
@@ -202,7 +161,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
     public void onServiceDisconnected(ComponentName name) {
         contadorService.setActivityHandler(null);
         contadorService = null;
-        unregisterReceiver(mConnReceiver);
     }
 
     @Override
@@ -222,13 +180,9 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
         }
         else if (id == R.id.btnStop) {
             pararContagem();
-            pararAlarmManager();
         }
         else if (id == R.id.btnSOAP) {
             testeSOAP();
-        }
-        else if (id == R.id.testeBtn) {
-            testeAlarmManager();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -256,24 +210,5 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
             }
         });
         task.execute(pis);
-    }
-
-    private void pararAlarmManager() {
-        Intent intent = new Intent("NOME_DA_ACAO");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-    }
-
-    private void testeAlarmManager() {
-        Intent intent = new Intent("NOME_DA_ACAO");
-        intent.putExtra("valor","500");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-        long dezSegundos = System.currentTimeMillis() + 10000;
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, dezSegundos, dezSegundos, pendingIntent);
     }
 }

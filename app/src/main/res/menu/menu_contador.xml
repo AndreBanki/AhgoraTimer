@@ -2,11 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".ContadorActivity">
 
-    <item android:id="@+id/testeBtn"
-        android:title="Teste"
-        android:icon="@drawable/ic_play"
-        app:showAsAction="ifRoom" />
-
     <item android:id="@+id/btnSOAP"
         android:title="Teste SOAP"
         app:showAsAction="never" />
