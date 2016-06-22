@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".ContadorActivity">
+
+    <item android:id="@+id/testeBtn"
+        android:title="Teste"
+        android:icon="@drawable/ic_play"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/btnSOAP"
+        android:title="Teste SOAP"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/btnStop"
+        android:title="Parar contagem"
+        android:icon="@drawable/ic_stop"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:icon="@drawable/ic_action_navigation_more_vert"
+        app:showAsAction="ifRoom" />
+</menu>
