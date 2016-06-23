@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -24,13 +22,14 @@ import android.widget.Toast;
 import com.banki.ahgora.model.Batida;
 import com.banki.ahgora.model.Batidas;
 import com.banki.ahgora.model.TimeConverter;
+import com.banki.ahgora.service.ContadorService;
 import com.banki.ahgora.settings.SettingsActivity;
 import com.banki.ahgora.webservice.AsyncResponse;
 import com.banki.ahgora.webservice.RetrieveResultTask;
 
 import java.util.Calendar;
 
-public class ContadorActivity extends AppCompatActivity implements ServiceConnection {
+public class MainActivity extends AppCompatActivity implements ServiceConnection {
 
     private ContadorService contadorService;
     private Handler activityHandler;
@@ -50,7 +49,7 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
         inicializaBotoes();
         inicializaHandler();
 
-        serviceIntent = new Intent(ContadorActivity.this, ContadorService.class);
+        serviceIntent = new Intent(MainActivity.this, ContadorService.class);
         startService(serviceIntent);
     }
 
@@ -89,13 +88,13 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
     @Override
     protected void onResume() {
         super.onResume();
-        bindService(serviceIntent, ContadorActivity.this, Context.BIND_AUTO_CREATE);
+        bindService(serviceIntent, MainActivity.this, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        unbindService(ContadorActivity.this);
+        unbindService(MainActivity.this);
     }
 
     @Override
@@ -123,7 +122,7 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Intent config = new Intent(ContadorActivity.this, SettingsActivity.class);
+            Intent config = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(config);
             return true;
         }
@@ -138,10 +137,10 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
             public void processFinish(Batidas result) {
                 batidas = result;
                 if (batidas == null) {
-                    Toast t = Toast.makeText(ContadorActivity.this, "Erro na comunicação", Toast.LENGTH_LONG);
+                    Toast t = Toast.makeText(MainActivity.this, "Erro na comunicação", Toast.LENGTH_LONG);
                     t.show();
                 } else {
-                    Toast t = Toast.makeText(ContadorActivity.this, "Batidas de hoje: " + batidas.listaBatidas(), Toast.LENGTH_LONG);
+                    Toast t = Toast.makeText(MainActivity.this, "Batidas de hoje: " + batidas.listaBatidas(), Toast.LENGTH_LONG);
                     t.show();
 
                     Batida batidaRef = batidas.ultimaBatida();

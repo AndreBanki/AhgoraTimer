@@ -1,4 +1,4 @@
-package com.banki.ahgora;
+package com.banki.ahgora.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -57,13 +57,6 @@ public class ContadorService extends Service implements Runnable {
         super.onDestroy();
     }
 
-    public void toggleState() {
-        if (running)
-            pausar();
-        else
-            iniciar();
-    }
-
     public void iniciar() {
         running = true;
         run();
@@ -71,15 +64,6 @@ public class ContadorService extends Service implements Runnable {
 
     public void pausar() {
         running = false;
-    }
-
-    public void reset() {
-        count = 0;
-        pausar();
-    }
-
-    public boolean isRunning() {
-        return running;
     }
 
     public int getCount() {

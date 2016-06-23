@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Ahgora Runner</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Ahgora Timer</string>
     <string name="action_settings">Configurações</string>
 </resources>
