@@ -99,6 +99,6 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:id="@+id/startBtn"
-        android:src="@drawable/ic_play" />
+        android:src="@drawable/ic_cached_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

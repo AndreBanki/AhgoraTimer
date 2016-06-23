@@ -49,7 +49,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
 
         inicializaBotoes();
         inicializaHandler();
-        atualizaBotoes();
 
         serviceIntent = new Intent(ContadorActivity.this, ContadorService.class);
         startService(serviceIntent);
@@ -57,18 +56,10 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
 
     private void inicializaBotoes() {
         startPauseBtn = (FloatingActionButton) findViewById(R.id.startBtn);
-
         startPauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iniciarPausarContagem();
-            }
-        });
-        startPauseBtn.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                pararContagem();
-                return true;
+                consultaWS();
             }
         });
     }
@@ -80,7 +71,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
                 Bundle envelope = msg.getData();
                 int totalSegundos = envelope.getInt("count");
                 atualizaResultadoContagem(totalSegundos, batidas.tempoIntervalo());
-                atualizaBotoes();
             }
         };
     }
@@ -96,35 +86,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
         valorHorasTxt.setText(TimeConverter.horasMinutosAsString(batidas.tempoIntervalo()));
     }
 
-    private void atualizaBotoes() {
-        Drawable playImg = ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_play);
-        Drawable pauseImg = ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_pause);
-        if (contadorService == null)
-            startPauseBtn.setImageDrawable(playImg);
-        else if (contadorService.isRunning())
-            startPauseBtn.setImageDrawable(pauseImg);
-        else
-            startPauseBtn.setImageDrawable(playImg);
-    }
-
-    private void iniciarPausarContagem() {
-        // se foi clicado no stop, vai destruir ao sair da activity se não for iniciado de novo
-        startService(serviceIntent);
-
-        contadorService.toggleState();
-        atualizaBotoes();
-    }
-
-    private void pararContagem() {
-        if (contadorService.getCount() > 0) {
-            contadorService.reset();
-            stopService(serviceIntent);
-
-            atualizaResultadoContagem(0,batidas.tempoIntervalo());
-            atualizaBotoes();
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -135,7 +96,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
     protected void onPause() {
         super.onPause();
         unbindService(ContadorActivity.this);
-        atualizaBotoes();
     }
 
     @Override
@@ -167,13 +127,10 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
             startActivity(config);
             return true;
         }
-        else if (id == R.id.btnSOAP) {
-            testeSOAP();
-        }
         return super.onOptionsItemSelected(item);
     }
 
-    private void testeSOAP() {
+    private void consultaWS() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String pis = settings.getString("pis", "");
         RetrieveResultTask task = new RetrieveResultTask(new AsyncResponse() {

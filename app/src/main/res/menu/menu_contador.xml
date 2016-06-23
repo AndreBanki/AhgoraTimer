@@ -2,12 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".ContadorActivity">
 
-    <item android:id="@+id/btnSOAP"
-        android:title="Teste SOAP"
-        app:showAsAction="never" />
-
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:icon="@drawable/ic_action_navigation_more_vert"
+        android:icon="@drawable/ic_account_circle_white_24dp"
         app:showAsAction="ifRoom" />
 </menu>
