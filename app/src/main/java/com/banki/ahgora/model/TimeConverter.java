@@ -36,4 +36,16 @@ public class TimeConverter {
         return batida;
     }
 
+    public static String horasMinutosAsString(int totalSegundos) {
+        int horas = totalSegundos / 3600;
+        int minutos = (totalSegundos - horas * 3600) / 60;
+        return String.format("%02d:%02d",horas,minutos);
+    }
+
+    public static String segundosAsString(int totalSegundos) {
+        int minutos = totalSegundos / 60;
+        int segundos = totalSegundos - minutos * 60;
+        return String.format(":%02d",segundos);
+    }
+
 }

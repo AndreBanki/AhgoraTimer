@@ -11,7 +11,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ import android.widget.Toast;
 
 import com.banki.ahgora.model.Batida;
 import com.banki.ahgora.model.Batidas;
-import com.banki.ahgora.model.CalculoHoraExtra;
+import com.banki.ahgora.model.TimeConverter;
 import com.banki.ahgora.settings.SettingsActivity;
 import com.banki.ahgora.webservice.AsyncResponse;
 import com.banki.ahgora.webservice.RetrieveResultTask;
@@ -37,10 +36,8 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
     private Handler activityHandler;
     private FloatingActionButton startPauseBtn;
     private Intent serviceIntent;
-    private Snackbar snackbar = null;
-    CalculoHoraExtra calculador;
 
-    private Batidas batidas = null;
+    private Batidas batidas = new Batidas();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +50,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
         inicializaBotoes();
         inicializaHandler();
         atualizaBotoes();
-
-        calculador = new CalculoHoraExtra();
 
         serviceIntent = new Intent(ContadorActivity.this, ContadorService.class);
         startService(serviceIntent);
@@ -84,21 +79,21 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
             public void handleMessage(Message msg) {
                 Bundle envelope = msg.getData();
                 int totalSegundos = envelope.getInt("count");
-                atualizaResultadoContagem(totalSegundos);
+                atualizaResultadoContagem(totalSegundos, batidas.tempoIntervalo());
                 atualizaBotoes();
             }
         };
     }
 
-    private void atualizaResultadoContagem(int totalSegundos) {
+    private void atualizaResultadoContagem(int totalSegundos, int totalSegundosIntervalo) {
         TextView horasMinutosTxt = (TextView) findViewById(R.id.horasMinutos);
-        horasMinutosTxt.setText(calculador.horasMinutosAsString(totalSegundos));
+        horasMinutosTxt.setText(TimeConverter.horasMinutosAsString(totalSegundos));
 
         TextView segundosTxt = (TextView) findViewById(R.id.segundos);
-        segundosTxt.setText(calculador.segundosAsString(totalSegundos));
+        segundosTxt.setText(TimeConverter.segundosAsString(totalSegundos));
 
         TextView valorHorasTxt = (TextView) findViewById(R.id.valorHoras);
-        valorHorasTxt.setText(calculador.valorHorasExtrasAsString(totalSegundos));
+        valorHorasTxt.setText(TimeConverter.horasMinutosAsString(batidas.tempoIntervalo()));
     }
 
     private void atualizaBotoes() {
@@ -116,10 +111,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
         // se foi clicado no stop, vai destruir ao sair da activity se não for iniciado de novo
         startService(serviceIntent);
 
-        // foi clicado no stop e a snackbar está visível ainda, remover
-        if (snackbar != null)
-            snackbar.dismiss();
-
         contadorService.toggleState();
         atualizaBotoes();
     }
@@ -129,7 +120,7 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
             contadorService.reset();
             stopService(serviceIntent);
 
-            atualizaResultadoContagem(0);
+            atualizaResultadoContagem(0,batidas.tempoIntervalo());
             atualizaBotoes();
         }
     }
@@ -137,8 +128,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        calculador.carregaPrefs(settings);
         bindService(serviceIntent, ContadorActivity.this, Context.BIND_AUTO_CREATE);
     }
 
@@ -154,7 +143,7 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
         ContadorService.ContadorBinder binder = (ContadorService.ContadorBinder) service;
         contadorService = binder.getContador();
         contadorService.setActivityHandler(activityHandler);
-        atualizaResultadoContagem(contadorService.getCount());
+        atualizaResultadoContagem(contadorService.getCount(),batidas.tempoIntervalo());
     }
 
     @Override
@@ -178,9 +167,6 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
             startActivity(config);
             return true;
         }
-        else if (id == R.id.btnStop) {
-            pararContagem();
-        }
         else if (id == R.id.btnSOAP) {
             testeSOAP();
         }
@@ -198,15 +184,28 @@ public class ContadorActivity extends AppCompatActivity implements ServiceConnec
                     Toast t = Toast.makeText(ContadorActivity.this, "Erro na comunicação", Toast.LENGTH_LONG);
                     t.show();
                 } else {
-                    Toast t = Toast.makeText(ContadorActivity.this, batidas.listaBatidas(), Toast.LENGTH_LONG);
+                    Toast t = Toast.makeText(ContadorActivity.this, "Batidas de hoje: " + batidas.listaBatidas(), Toast.LENGTH_LONG);
                     t.show();
 
                     Batida batidaRef = batidas.ultimaBatida();
                     Calendar agora = Calendar.getInstance();
-
                     int count = batidaRef.tempoDecorridoAte(agora);
-                    contadorService.setCount(count);
-                    atualizaResultadoContagem(count);
+
+                    if (batidas.statusJornada() == Batidas.VAZIO) {
+                        atualizaResultadoContagem(0,0);
+                    } else if (batidas.statusJornada() == Batidas.TRABALHANDO) {
+                        int totalCount = count + batidas.horasJaTrabalhadas();
+                        contadorService.setCount(totalCount);
+                        atualizaResultadoContagem(totalCount, batidas.tempoIntervalo());
+                        contadorService.iniciar();
+                    } else if (batidas.statusJornada() == Batidas.INTERVALO) {
+                        contadorService.setCount(count);
+                        atualizaResultadoContagem(batidas.horasJaTrabalhadas(), count);
+                        contadorService.iniciar();
+                    } else { // Batidas.ENCERRADO, Batidas.EXCESSOBATIDAS
+                        atualizaResultadoContagem(batidas.horasJaTrabalhadas(), batidas.tempoIntervalo());
+                        contadorService.pausar();
+                    }
                 }
             }
         });

@@ -14,11 +14,21 @@ public class Batida {
         this.horaBatida = horaBatida;
     }
 
+    public Calendar getAsDate() {
+        Calendar batida = Calendar.getInstance();
+        batida.setTime(horaBatida);
+        return batida;
+    }
+
     public int tempoDecorridoAte(Calendar date) {
         Calendar batida = Calendar.getInstance();
         batida.setTime(horaBatida);
         int tempo = (int)(date.getTimeInMillis() - batida.getTimeInMillis()) / 1000;
         return tempo;
+    }
+
+    public int tempoDecorridoAte(Batida batida) {
+        return tempoDecorridoAte(batida.getAsDate());
     }
 
     @Override
