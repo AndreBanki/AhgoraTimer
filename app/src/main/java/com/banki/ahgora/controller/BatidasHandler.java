@@ -7,6 +7,7 @@ import com.banki.ahgora.MainActivity;
 import com.banki.ahgora.model.Batida;
 import com.banki.ahgora.model.Batidas;
 import com.banki.ahgora.service.ContadorService;
+import com.banki.ahgora.webservice.AhgoraWS;
 import com.banki.ahgora.webservice.BatidasTask;
 
 import java.util.Calendar;
@@ -14,6 +15,7 @@ import java.util.Calendar;
 public class BatidasHandler extends ActivityHandler implements AsyncResponse {
 
     private Batidas batidas = new Batidas();
+    private static boolean webServiceRunning = false;
 
     public BatidasHandler(MainActivity view, ContadorService contadorService) {
         super(view, contadorService);
@@ -39,24 +41,35 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     }
 
     public void refreshDataFromWS() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(view.getApplicationContext());
-        String pis = settings.getString("pis", "");
-        BatidasTask task = new BatidasTask(this);
-        task.execute(pis);
+        if (!webServiceRunning) {
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(view.getApplicationContext());
+            String pis = settings.getString("pis", "");
+            String empresa = settings.getString("empresa", "");
+            if (pis.trim().isEmpty())
+                view.toast("Informe o seu PIS na tela de Configurações.");
+            else if (!AhgoraWS.validaEmpresa(empresa))
+                view.toast("Código da empresa inválido. Este aplicativo é destinado apenas ao uso dos colaboradores da AltoQi.");
+            else {
+                webServiceRunning = true;
+                BatidasTask task = new BatidasTask(this);
+                task.execute(pis);
+            }
+        }
     }
 
     @Override
     public void processFinish(Batidas result) {
         batidas = result;
         if (batidas == null)
-            view.toast("Erro na comunicação");
+            view.toast("Erro na comunicação com o serviço de batidas.");
         else {
-            view.toast("Batidas de hoje: " + batidas.listaBatidas());
+            view.toast("Batidas de hoje: " + batidas.listaBatidasAsString());
 
             int count = valorCronometro();
             atualizaContadorService(count);
             atualizaResultadoContagem(count);
         }
+        webServiceRunning = false;
     }
 
     private int valorCronometro() {
