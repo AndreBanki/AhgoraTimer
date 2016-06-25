@@ -17,14 +17,13 @@ public class BatidasWS {
     public Batidas obtemListaBatidas(String pis) {
         SoapObject request = montaRequest(pis);
         SoapObject response = obtemResponse(request);
-
-        Batidas batidas = parseBatidas(response);
-        return batidas;
+        return parseBatidas(response);
     }
 
     private Batidas parseBatidas(SoapObject response) {
-        Batidas batidas = new Batidas();
+        Batidas batidas = null;
         if (response != null) {
+            batidas = new Batidas();
             for (int i = 0; i < response.getPropertyCount(); i++) {
                 SoapObject batida = (SoapObject) response.getProperty(i);
                 String hora = batida.getProperty("Hora").toString();
@@ -59,8 +58,7 @@ public class BatidasWS {
         HttpTransportSE androidHttpTransport = new HttpTransportSE(AhgoraWS.URL);
         try {
             androidHttpTransport.call(SOAP_ACTION, envelope);
-            SoapObject response = (SoapObject)envelope.getResponse();
-            return response;
+            return (SoapObject)envelope.getResponse();
         } catch(Exception e) {
             e.printStackTrace();
             return null;

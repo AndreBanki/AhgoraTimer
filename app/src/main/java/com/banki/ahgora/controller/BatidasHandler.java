@@ -73,13 +73,15 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     }
 
     private int valorCronometro() {
+        int count = 0;
         Batida batidaRef = batidas.ultimaBatida();
-        Calendar agora = Calendar.getInstance();
-        int count = batidaRef.tempoDecorridoAte(agora);
+        if (batidaRef != null) {
+            Calendar agora = Calendar.getInstance();
+            count = batidaRef.tempoDecorridoAte(agora);
 
-        if (batidas.statusJornada() == Batidas.TRABALHANDO)
-            count += batidas.horasJaTrabalhadas();
-
+            if (batidas.statusJornada() == Batidas.TRABALHANDO)
+                count += batidas.horasJaTrabalhadas();
+        }
         return count;
     }
 
