@@ -58,8 +58,10 @@ public class ContadorService extends Service implements Runnable {
     }
 
     public void iniciar() {
-        running = true;
-        run();
+        if (!running) {
+            running = true;
+            run();
+        }
     }
 
     public void pausar() {
