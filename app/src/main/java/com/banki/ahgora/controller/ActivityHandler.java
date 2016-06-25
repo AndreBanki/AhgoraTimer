@@ -12,10 +12,12 @@ public class ActivityHandler extends Handler {
     protected MainActivity view;
     protected ContadorService contadorService;
 
-    public ActivityHandler(MainActivity view, ContadorService contadorService) {
+    public ActivityHandler(MainActivity view) {
         this.view = view;
-        this.contadorService = contadorService;
+    }
 
+    public void setContadorService(ContadorService contadorService) {
+        this.contadorService = contadorService;
         contadorService.setActivityHandler(this);
         atualizaResultadoContagem(contadorService.getCount());
     }

@@ -1,12 +1,12 @@
 package com.banki.ahgora.controller;
 
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.banki.ahgora.MainActivity;
 import com.banki.ahgora.model.Batida;
 import com.banki.ahgora.model.Batidas;
-import com.banki.ahgora.service.ContadorService;
 import com.banki.ahgora.webservice.AhgoraWS;
 import com.banki.ahgora.webservice.BatidasTask;
 
@@ -17,26 +17,34 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     private Batidas batidas = new Batidas();
     private static boolean webServiceRunning = false;
 
-    public BatidasHandler(MainActivity view, ContadorService contadorService) {
-        super(view, contadorService);
+    public BatidasHandler(MainActivity view) {
+        super(view);
+    }
+
+    public void onSaveInstanceState(Bundle state) {
+        state.putSerializable("batidas", batidas);
+    }
+
+    public void onRestoreInstanceState(Bundle state) {
+        batidas = (Batidas)state.getSerializable("batidas");
     }
 
     @Override
     protected void atualizaResultadoContagem(int count) {
-        if (batidas == null)
-            return;
-        else if (batidas.statusJornada() == Batidas.VAZIO) {
-            view.atualizaHorasTrabalhadas(0);
-            view.atualizaIntervalo(0);
-        } else if (batidas.statusJornada() == Batidas.TRABALHANDO) {
-            view.atualizaHorasTrabalhadas(count);
-            view.atualizaIntervalo(batidas.tempoIntervalo());
-        } else if (batidas.statusJornada() == Batidas.INTERVALO) {
-            view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas());
-            view.atualizaIntervalo(count);
-        } else { // Batidas.ENCERRADO, Batidas.EXCESSOBATIDAS
-            view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas());
-            view.atualizaIntervalo(batidas.tempoIntervalo());
+        if (batidas != null) {
+            if (batidas.statusJornada() == Batidas.VAZIO) {
+                view.atualizaHorasTrabalhadas(0);
+                view.atualizaIntervalo(0);
+            } else if (batidas.statusJornada() == Batidas.TRABALHANDO) {
+                view.atualizaHorasTrabalhadas(count);
+                view.atualizaIntervalo(batidas.tempoIntervalo());
+            } else if (batidas.statusJornada() == Batidas.INTERVALO) {
+                view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas());
+                view.atualizaIntervalo(count);
+            } else { // Batidas.ENCERRADO, Batidas.EXCESSOBATIDAS
+                view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas());
+                view.atualizaIntervalo(batidas.tempoIntervalo());
+            }
         }
     }
 

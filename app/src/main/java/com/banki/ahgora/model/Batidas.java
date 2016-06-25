@@ -1,9 +1,10 @@
 package com.banki.ahgora.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Batidas {
+public class Batidas implements Serializable {
 
     public static int VAZIO = 0;
     public static int TRABALHANDO = 1;
@@ -72,13 +73,17 @@ public class Batidas {
         return batidas.get(3);
     }
 
-    public String listaBatidas() {
+    public String listaBatidasAsString() {
         String retorno = "";
         for (int i = 0; i < batidas.size()-1; i++) {
             retorno += batidas.get(i).toString() + "-";
         }
-        if (!batidas.isEmpty())
+
+        if (batidas.isEmpty())
+            retorno = "---";
+        else
             retorno += batidas.get(batidas.size()-1).toString();
+
         return retorno;
     }
 

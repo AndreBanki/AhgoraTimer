@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.banki.ahgora.controller.BatidasHandler;
+import com.banki.ahgora.model.Batidas;
 import com.banki.ahgora.model.TimeConverter;
 import com.banki.ahgora.service.ContadorService;
 import com.banki.ahgora.settings.SettingsActivity;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+
+        activityHandler = new BatidasHandler(this);
 
         startPauseBtn = (FloatingActionButton) findViewById(R.id.startBtn);
         startPauseBtn.setOnClickListener(new View.OnClickListener() {
@@ -60,10 +63,23 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        activityHandler.onSaveInstanceState(state);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        activityHandler = new BatidasHandler(this);
+        activityHandler.onRestoreInstanceState(state);
+    }
+
+    @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
         ContadorService.ContadorBinder binder = (ContadorService.ContadorBinder) service;
         contadorService = binder.getContador();
-        activityHandler = new BatidasHandler(this, contadorService);
+        activityHandler.setContadorService(contadorService);
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.banki.ahgora.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class Batida {
+public class Batida implements Serializable {
 
     private Date horaBatida;
 
@@ -23,8 +24,7 @@ public class Batida {
     public int tempoDecorridoAte(Calendar date) {
         Calendar batida = Calendar.getInstance();
         batida.setTime(horaBatida);
-        int tempo = (int)(date.getTimeInMillis() - batida.getTimeInMillis()) / 1000;
-        return tempo;
+        return (int)(date.getTimeInMillis() - batida.getTimeInMillis()) / 1000;
     }
 
     public int tempoDecorridoAte(Batida batida) {
@@ -36,7 +36,6 @@ public class Batida {
         Locale PT_BR = new Locale("pt","BR");
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", PT_BR);
         timeFormat.setTimeZone(TimeZone.getTimeZone("GMT-3"));
-        String hora = timeFormat.format(horaBatida.getTime());
-        return hora;
+        return timeFormat.format(horaBatida.getTime());
     }
 }
