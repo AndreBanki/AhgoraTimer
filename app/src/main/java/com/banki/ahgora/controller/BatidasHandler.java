@@ -33,17 +33,17 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     protected void atualizaResultadoContagem(int count) {
         if (batidas != null) {
             if (batidas.statusJornada() == Batidas.VAZIO) {
-                view.atualizaHorasTrabalhadas(0);
-                view.atualizaIntervalo(0);
+                view.atualizaHorasTrabalhadas(0, false);
+                view.atualizaIntervalo(0, false);
             } else if (batidas.statusJornada() == Batidas.TRABALHANDO) {
-                view.atualizaHorasTrabalhadas(count);
-                view.atualizaIntervalo(batidas.tempoIntervalo());
+                view.atualizaHorasTrabalhadas(count, true);
+                view.atualizaIntervalo(batidas.tempoIntervalo(), false);
             } else if (batidas.statusJornada() == Batidas.INTERVALO) {
-                view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas());
-                view.atualizaIntervalo(count);
+                view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas(), false);
+                view.atualizaIntervalo(count, true);
             } else { // Batidas.ENCERRADO, Batidas.EXCESSOBATIDAS
-                view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas());
-                view.atualizaIntervalo(batidas.tempoIntervalo());
+                view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas(), false);
+                view.atualizaIntervalo(batidas.tempoIntervalo(), false);
             }
         }
     }

@@ -30,6 +30,6 @@ public class ActivityHandler extends Handler {
     }
 
     protected void atualizaResultadoContagem(int count) {
-        view.atualizaHorasTrabalhadas(count);
+        view.atualizaHorasTrabalhadas(count, true);
     }
 }

@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -111,16 +112,29 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         t.show();
     }
 
-    public void atualizaHorasTrabalhadas(int segundos) {
+    public void atualizaHorasTrabalhadas(int segundos, boolean running) {
         TextView horasMinutosTxt = (TextView) findViewById(R.id.horasMinutos);
         horasMinutosTxt.setText(TimeConverter.horasMinutosAsString(segundos));
 
         TextView segundosTxt = (TextView) findViewById(R.id.segundos);
-        segundosTxt.setText(TimeConverter.segundosAsString(segundos));
+        if (running)
+            segundosTxt.setText(TimeConverter.segundosAsString(segundos));
+        else
+            segundosTxt.setText("");
     }
 
-    public void atualizaIntervalo(int segundos) {
+    public void atualizaIntervalo(int segundos, boolean running) {
         TextView valorHorasTxt = (TextView) findViewById(R.id.valorHoras);
-        valorHorasTxt.setText(TimeConverter.horasMinutosAsString(segundos));
+        String texto = TimeConverter.horasMinutosAsString(segundos);
+        if (running)
+            texto += TimeConverter.segundosAsString(segundos);
+        valorHorasTxt.setText(texto);
+
+        int umaHora = 3600;
+        if (segundos > 0 && segundos < umaHora) {
+            LinearLayout frame = (LinearLayout) findViewById(R.id.frameIntervalo);
+            frame.setBackgroundColor(getResources().getColor(R.color.colorError));
+            frame.invalidate();
+        }
     }
 }
