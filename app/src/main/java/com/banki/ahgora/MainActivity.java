@@ -4,11 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,24 +15,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.banki.ahgora.model.Batida;
-import com.banki.ahgora.model.Batidas;
+import com.banki.ahgora.controller.BatidasHandler;
 import com.banki.ahgora.model.TimeConverter;
 import com.banki.ahgora.service.ContadorService;
 import com.banki.ahgora.settings.SettingsActivity;
-import com.banki.ahgora.webservice.AsyncResponse;
-import com.banki.ahgora.webservice.RetrieveResultTask;
-
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements ServiceConnection {
 
     private ContadorService contadorService;
-    private Handler activityHandler;
+    private BatidasHandler activityHandler;
     private FloatingActionButton startPauseBtn;
     private Intent serviceIntent;
-
-    private Batidas batidas = new Batidas();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,43 +35,16 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        inicializaBotoes();
-        inicializaHandler();
-
-        serviceIntent = new Intent(MainActivity.this, ContadorService.class);
-        startService(serviceIntent);
-    }
-
-    private void inicializaBotoes() {
         startPauseBtn = (FloatingActionButton) findViewById(R.id.startBtn);
         startPauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                consultaWS();
+                activityHandler.refreshDataFromWS();
             }
         });
-    }
 
-    private void inicializaHandler() {
-        activityHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                Bundle envelope = msg.getData();
-                int totalSegundos = envelope.getInt("count");
-                atualizaResultadoContagem(totalSegundos, batidas.tempoIntervalo());
-            }
-        };
-    }
-
-    private void atualizaResultadoContagem(int totalSegundos, int totalSegundosIntervalo) {
-        TextView horasMinutosTxt = (TextView) findViewById(R.id.horasMinutos);
-        horasMinutosTxt.setText(TimeConverter.horasMinutosAsString(totalSegundos));
-
-        TextView segundosTxt = (TextView) findViewById(R.id.segundos);
-        segundosTxt.setText(TimeConverter.segundosAsString(totalSegundos));
-
-        TextView valorHorasTxt = (TextView) findViewById(R.id.valorHoras);
-        valorHorasTxt.setText(TimeConverter.horasMinutosAsString(batidas.tempoIntervalo()));
+        serviceIntent = new Intent(MainActivity.this, ContadorService.class);
+        startService(serviceIntent);
     }
 
     @Override
@@ -101,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     public void onServiceConnected(ComponentName name, IBinder service) {
         ContadorService.ContadorBinder binder = (ContadorService.ContadorBinder) service;
         contadorService = binder.getContador();
-        contadorService.setActivityHandler(activityHandler);
-        atualizaResultadoContagem(contadorService.getCount(),batidas.tempoIntervalo());
+        activityHandler = new BatidasHandler(this, contadorService);
     }
 
     @Override
@@ -129,42 +90,21 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         return super.onOptionsItemSelected(item);
     }
 
-    private void consultaWS() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String pis = settings.getString("pis", "");
-        RetrieveResultTask task = new RetrieveResultTask(new AsyncResponse() {
-            @Override
-            public void processFinish(Batidas result) {
-                batidas = result;
-                if (batidas == null) {
-                    Toast t = Toast.makeText(MainActivity.this, "Erro na comunicação", Toast.LENGTH_LONG);
-                    t.show();
-                } else {
-                    Toast t = Toast.makeText(MainActivity.this, "Batidas de hoje: " + batidas.listaBatidas(), Toast.LENGTH_LONG);
-                    t.show();
+    public void toast(String texto) {
+        Toast t = Toast.makeText(MainActivity.this, texto, Toast.LENGTH_LONG);
+        t.show();
+    }
 
-                    Batida batidaRef = batidas.ultimaBatida();
-                    Calendar agora = Calendar.getInstance();
-                    int count = batidaRef.tempoDecorridoAte(agora);
+    public void atualizaHorasTrabalhadas(int segundos) {
+        TextView horasMinutosTxt = (TextView) findViewById(R.id.horasMinutos);
+        horasMinutosTxt.setText(TimeConverter.horasMinutosAsString(segundos));
 
-                    if (batidas.statusJornada() == Batidas.VAZIO) {
-                        atualizaResultadoContagem(0,0);
-                    } else if (batidas.statusJornada() == Batidas.TRABALHANDO) {
-                        int totalCount = count + batidas.horasJaTrabalhadas();
-                        contadorService.setCount(totalCount);
-                        atualizaResultadoContagem(totalCount, batidas.tempoIntervalo());
-                        contadorService.iniciar();
-                    } else if (batidas.statusJornada() == Batidas.INTERVALO) {
-                        contadorService.setCount(count);
-                        atualizaResultadoContagem(batidas.horasJaTrabalhadas(), count);
-                        contadorService.iniciar();
-                    } else { // Batidas.ENCERRADO, Batidas.EXCESSOBATIDAS
-                        atualizaResultadoContagem(batidas.horasJaTrabalhadas(), batidas.tempoIntervalo());
-                        contadorService.pausar();
-                    }
-                }
-            }
-        });
-        task.execute(pis);
+        TextView segundosTxt = (TextView) findViewById(R.id.segundos);
+        segundosTxt.setText(TimeConverter.segundosAsString(segundos));
+    }
+
+    public void atualizaIntervalo(int segundos) {
+        TextView valorHorasTxt = (TextView) findViewById(R.id.valorHoras);
+        valorHorasTxt.setText(TimeConverter.horasMinutosAsString(segundos));
     }
 }

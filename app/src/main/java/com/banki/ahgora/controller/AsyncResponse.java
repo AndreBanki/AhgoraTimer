@@ -1,4 +1,4 @@
-package com.banki.ahgora.webservice;
+package com.banki.ahgora.controller;
 
 import com.banki.ahgora.model.Batidas;
 
