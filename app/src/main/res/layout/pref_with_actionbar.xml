@@ -1,5 +1,6 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -24,19 +25,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Versão: ---"
+            android:text="@string/versao"
             android:id="@+id/txtVersao"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/textColorPrimary" />
+            android:textColor="@color/textColorPrimary"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Desenvolvedor: André Luiz Banki"
-            android:textSize="15dp"
+            android:text="@string/desenvolvedor"
+            android:textSize="15sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="10dp"

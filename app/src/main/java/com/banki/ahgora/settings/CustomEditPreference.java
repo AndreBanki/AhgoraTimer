@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 
 public class CustomEditPreference extends EditTextPreference {
 
-    CharSequence originalSummary;
+    private CharSequence originalSummary;
 
     public CustomEditPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

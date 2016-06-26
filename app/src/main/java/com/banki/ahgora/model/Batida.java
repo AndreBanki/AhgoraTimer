@@ -15,7 +15,7 @@ public class Batida implements Serializable {
         this.horaBatida = horaBatida;
     }
 
-    public Calendar getAsDate() {
+    private Calendar getAsDate() {
         Calendar batida = Calendar.getInstance();
         batida.setTime(horaBatida);
         return batida;

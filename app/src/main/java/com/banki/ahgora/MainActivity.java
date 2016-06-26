@@ -3,6 +3,7 @@ package com.banki.ahgora;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,20 +95,24 @@ public class MainActivity extends ServiceActivity {
         int umaHora = 3600;
         LinearLayout frame = (LinearLayout) findViewById(R.id.frameIntervalo);
         if (segundos > 0 && segundos < umaHora)
-            frame.setBackgroundColor(getResources().getColor(R.color.colorError));
+            frame.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                                     R.color.colorError));
         else
-            frame.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+            frame.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                                     R.color.colorPrimaryDark));
 
         frame.invalidate();
     }
 
     public void atualizaListaBatidas(String listaBatidas) {
         TextView listaBatidasTxt = (TextView) findViewById(R.id.txtListaBatidas);
-        listaBatidasTxt.setText("Batidas de hoje: " + listaBatidas);
+        listaBatidasTxt.setText(new StringBuilder().append(getResources().getString(R.string.batidas_hoje))
+                                                   .append(listaBatidas)
+                                                   .toString());
     }
 
     public void iniciaIndicacaoProgresso() {
-        atualizaListaBatidas("CONSULTANDO...");
+        atualizaListaBatidas(getResources().getString(R.string.consultando));
         refreshBtn.setAlpha((float)0.5);
     }
 

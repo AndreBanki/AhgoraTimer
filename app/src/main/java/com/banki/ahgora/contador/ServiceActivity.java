@@ -9,9 +9,9 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 
 
-public class ServiceActivity  extends AppCompatActivity implements ServiceConnection {
+public abstract class ServiceActivity  extends AppCompatActivity implements ServiceConnection {
 
-    protected ContadorService contadorService;
+    private ContadorService contadorService;
     protected ActivityHandler activityHandler;
     private Intent serviceIntent;
 

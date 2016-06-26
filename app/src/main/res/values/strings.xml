@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Ahgora Timer</string>
     <string name="action_settings">Configurações</string>
+    <string name="tempo_trabalhado">Tempo trabalhado</string>
+    <string name="HH_MM_zero">00:00</string>
+    <string name="SS_zero">:00</string>
+    <string name="versao">"Versão: "</string>
+    <string name="desenvolvedor">Desenvolvedor: André Luiz Banki</string>
+    <string name="tempo_intervalo">Tempo do intervalo:</string>
+    <string name="batidas_hoje">"Batidas de hoje: "</string>
+    <string name="consultando">CONSULTANDO...</string>
 </resources>

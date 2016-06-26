@@ -23,7 +23,9 @@ public class SettingsActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
 
         TextView txtVersao = (TextView) findViewById(R.id.txtVersao);
-        txtVersao.setText("Versão: " + BuildConfig.VERSION_NAME);
+        txtVersao.setText(new StringBuilder().append(getResources().getString(R.string.versao))
+                                             .append(BuildConfig.VERSION_NAME)
+                                             .toString());
     }
 
     @Override
