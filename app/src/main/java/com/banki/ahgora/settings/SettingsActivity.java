@@ -3,7 +3,9 @@ package com.banki.ahgora.settings;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.banki.ahgora.BuildConfig;
 import com.banki.ahgora.R;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -19,6 +21,9 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getFragmentManager().beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
+
+        TextView txtVersao = (TextView) findViewById(R.id.txtVersao);
+        txtVersao.setText("Versão: " + BuildConfig.VERSION_NAME);
     }
 
     @Override
