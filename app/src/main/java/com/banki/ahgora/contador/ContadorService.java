@@ -1,4 +1,4 @@
-package com.banki.ahgora.service;
+package com.banki.ahgora.contador;
 
 import android.app.Service;
 import android.content.Intent;

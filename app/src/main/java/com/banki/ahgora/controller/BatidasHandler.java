@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import com.banki.ahgora.MainActivity;
 import com.banki.ahgora.model.Batida;
 import com.banki.ahgora.model.Batidas;
+import com.banki.ahgora.contador.ActivityHandler;
+import com.banki.ahgora.contador.ServiceActivity;
 import com.banki.ahgora.webservice.AhgoraWS;
 import com.banki.ahgora.webservice.BatidasTask;
 
@@ -17,35 +19,41 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     private Batidas batidas = new Batidas();
     private static boolean webServiceRunning = false;
 
-    public BatidasHandler(MainActivity view) {
+    public BatidasHandler(ServiceActivity view) {
         super(view);
     }
 
+    private MainActivity getView() {
+        return (MainActivity)view;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle state) {
         state.putSerializable("batidas", batidas);
     }
 
+    @Override
     public void onRestoreInstanceState(Bundle state) {
         batidas = (Batidas)state.getSerializable("batidas");
         if (batidas != null)
-            view.atualizaListaBatidas(batidas.listaBatidasAsString());
+            getView().atualizaListaBatidas(batidas.listaBatidasAsString());
     }
 
     @Override
     protected void atualizaResultadoContagem(int count) {
         if (batidas != null) {
             if (batidas.statusJornada() == Batidas.VAZIO) {
-                view.atualizaHorasTrabalhadas(0, false);
-                view.atualizaIntervalo(0, false);
+                getView().atualizaHorasTrabalhadas(0, false);
+                getView().atualizaIntervalo(0, false);
             } else if (batidas.statusJornada() == Batidas.TRABALHANDO) {
-                view.atualizaHorasTrabalhadas(count, true);
-                view.atualizaIntervalo(batidas.tempoIntervalo(), false);
+                getView().atualizaHorasTrabalhadas(count, true);
+                getView().atualizaIntervalo(batidas.tempoIntervalo(), false);
             } else if (batidas.statusJornada() == Batidas.INTERVALO) {
-                view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas(), false);
-                view.atualizaIntervalo(count, true);
+                getView().atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas(), false);
+                getView().atualizaIntervalo(count, true);
             } else { // Batidas.ENCERRADO, Batidas.EXCESSOBATIDAS
-                view.atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas(), false);
-                view.atualizaIntervalo(batidas.tempoIntervalo(), false);
+                getView().atualizaHorasTrabalhadas(batidas.horasJaTrabalhadas(), false);
+                getView().atualizaIntervalo(batidas.tempoIntervalo(), false);
             }
         }
     }
@@ -56,12 +64,12 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
             String pis = settings.getString("pis", "");
             String empresa = settings.getString("empresa", "");
             if (pis.trim().isEmpty())
-                view.toast("Informe o seu PIS na tela de Configurações.");
+                getView().toast("Informe o seu PIS na tela de Configurações.");
             else if (!AhgoraWS.validaEmpresa(empresa))
-                view.toast("Código da empresa inválido. Este aplicativo é destinado apenas ao uso dos colaboradores da AltoQi.");
+                getView().toast("Código da empresa inválido. Este aplicativo é destinado apenas ao uso dos colaboradores da AltoQi.");
             else {
                 webServiceRunning = true;
-                view.iniciaIndicacaoProgresso();
+                getView().iniciaIndicacaoProgresso();
                 BatidasTask task = new BatidasTask(this);
                 task.execute(pis);
             }
@@ -72,16 +80,16 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     public void processFinish(Batidas result) {
         batidas = result;
         if (batidas == null)
-            view.toast("Erro na comunicação com o serviço de batidas.");
+            getView().toast("Erro na comunicação com o serviço de batidas.");
         else {
-            view.atualizaListaBatidas(batidas.listaBatidasAsString());
+            getView().atualizaListaBatidas(batidas.listaBatidasAsString());
 
             int count = valorCronometro();
             atualizaContadorService(count);
             atualizaResultadoContagem(count);
         }
         webServiceRunning = false;
-        view.terminaIndicacaoProgresso();
+        getView().terminaIndicacaoProgresso();
     }
 
     private int valorCronometro() {

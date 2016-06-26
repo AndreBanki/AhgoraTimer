@@ -1,20 +1,21 @@
-package com.banki.ahgora.controller;
+package com.banki.ahgora.contador;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import com.banki.ahgora.MainActivity;
-import com.banki.ahgora.service.ContadorService;
-
 public class ActivityHandler extends Handler {
 
-    protected MainActivity view;
+    protected ServiceActivity view;
     protected ContadorService contadorService;
 
-    public ActivityHandler(MainActivity view) {
+    public ActivityHandler(ServiceActivity view) {
         this.view = view;
     }
+
+    public void onSaveInstanceState(Bundle state) {}
+
+    public void onRestoreInstanceState(Bundle state) {}
 
     public void setContadorService(ContadorService contadorService) {
         this.contadorService = contadorService;
@@ -29,7 +30,5 @@ public class ActivityHandler extends Handler {
         atualizaResultadoContagem(totalSegundos);
     }
 
-    protected void atualizaResultadoContagem(int count) {
-        view.atualizaHorasTrabalhadas(count, true);
-    }
+    protected void atualizaResultadoContagem(int count) {}
 }

@@ -1,12 +1,7 @@
 package com.banki.ahgora;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,17 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.banki.ahgora.controller.BatidasHandler;
-import com.banki.ahgora.model.Batidas;
 import com.banki.ahgora.model.TimeConverter;
-import com.banki.ahgora.service.ContadorService;
+import com.banki.ahgora.contador.ServiceActivity;
 import com.banki.ahgora.settings.SettingsActivity;
 
-public class MainActivity extends AppCompatActivity implements ServiceConnection {
+public class MainActivity extends ServiceActivity {
 
-    private ContadorService contadorService;
-    private BatidasHandler activityHandler;
-    private FloatingActionButton startPauseBtn;
-    private Intent serviceIntent;
+    private FloatingActionButton refreshBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,56 +28,22 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
-        activityHandler = new BatidasHandler(this);
-
-        startPauseBtn = (FloatingActionButton) findViewById(R.id.startBtn);
-        startPauseBtn.setOnClickListener(new View.OnClickListener() {
+        refreshBtn = (FloatingActionButton) findViewById(R.id.refreshBtn);
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activityHandler.refreshDataFromWS();
+                batidasHandler().refreshDataFromWS();
             }
         });
-
-        serviceIntent = new Intent(MainActivity.this, ContadorService.class);
-        startService(serviceIntent);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        bindService(serviceIntent, MainActivity.this, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unbindService(MainActivity.this);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-        activityHandler.onSaveInstanceState(state);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle state) {
-        super.onRestoreInstanceState(state);
+    protected void inicializaHandler() {
         activityHandler = new BatidasHandler(this);
-        activityHandler.onRestoreInstanceState(state);
     }
 
-    @Override
-    public void onServiceConnected(ComponentName name, IBinder service) {
-        ContadorService.ContadorBinder binder = (ContadorService.ContadorBinder) service;
-        contadorService = binder.getContador();
-        activityHandler.setContadorService(contadorService);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName name) {
-        contadorService.setActivityHandler(null);
-        contadorService = null;
+    private BatidasHandler batidasHandler() {
+        return (BatidasHandler)activityHandler;
     }
 
     @Override
@@ -145,10 +102,10 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     public void iniciaIndicacaoProgresso() {
         atualizaListaBatidas("CONSULTANDO...");
-        startPauseBtn.setAlpha((float)0.5);
+        refreshBtn.setAlpha((float)0.5);
     }
 
     public void terminaIndicacaoProgresso() {
-        startPauseBtn.setAlpha((float)1);
+        refreshBtn.setAlpha((float)1);
     }
 }

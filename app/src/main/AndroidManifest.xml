@@ -24,7 +24,7 @@
         </activity>
 
         <service
-            android:name=".service.ContadorService"
+            android:name=".contador.ContadorService"
             android:enabled="true"
             android:exported="true" >
         </service>

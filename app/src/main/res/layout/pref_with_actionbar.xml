@@ -41,16 +41,6 @@
             android:layout_marginTop="1dp"
             android:layout_marginLeft="10dp"
             android:textColor="@color/textColorPrimary" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Contato: andre.banki@gmail.com"
-            android:textSize="15dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/textColorPrimary" />
-
     </LinearLayout>
 
 
