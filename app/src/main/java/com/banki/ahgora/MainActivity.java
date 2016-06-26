@@ -137,4 +137,9 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
             frame.invalidate();
         }
     }
+
+    public void atualizaListaBatidas(String listaBatidas) {
+        TextView listaBatidasTxt = (TextView) findViewById(R.id.txtListaBatidas);
+        listaBatidasTxt.setText("Batidas de hoje: " + listaBatidas);
+    }
 }

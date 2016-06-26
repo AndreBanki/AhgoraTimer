@@ -27,6 +27,7 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
 
     public void onRestoreInstanceState(Bundle state) {
         batidas = (Batidas)state.getSerializable("batidas");
+        view.atualizaListaBatidas(batidas.listaBatidasAsString());
     }
 
     @Override
@@ -71,7 +72,7 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
         if (batidas == null)
             view.toast("Erro na comunicação com o serviço de batidas.");
         else {
-            view.toast("Batidas de hoje: " + batidas.listaBatidasAsString());
+            view.atualizaListaBatidas(batidas.listaBatidasAsString());
 
             int count = valorCronometro();
             atualizaContadorService(count);

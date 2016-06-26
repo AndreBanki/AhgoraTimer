@@ -94,11 +94,31 @@
 
 </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_gravity="bottom">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Batidas de hoje: ---"
+            android:id="@+id/txtListaBatidas"
+            android:textSize="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="1dp"
+            android:textColor="@color/textColorPrimary" />
+
+    </RelativeLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="26dp"
         android:id="@+id/startBtn"
         android:src="@drawable/ic_cached_white_24dp" />
 
