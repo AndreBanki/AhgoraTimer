@@ -69,30 +69,36 @@ public class MainActivity extends ServiceActivity {
         t.show();
     }
 
-    public void atualizaHorasTrabalhadas(int segundos, boolean running) {
+    public void atualizaHorasTrabalhadas(int segundos, boolean exibirSegundos) {
         TextView horasMinutosTxt = (TextView) findViewById(R.id.horasMinutos);
         horasMinutosTxt.setText(TimeConverter.horasMinutosAsString(segundos));
 
         TextView segundosTxt = (TextView) findViewById(R.id.segundos);
-        if (running)
+        if (exibirSegundos)
             segundosTxt.setText(TimeConverter.segundosAsString(segundos));
         else
             segundosTxt.setText("");
     }
 
-    public void atualizaIntervalo(int segundos, boolean running) {
+    public void atualizaIntervalo(int segundos, boolean exibirSegundos) {
         TextView valorHorasTxt = (TextView) findViewById(R.id.valorHoras);
         String texto = TimeConverter.horasMinutosAsString(segundos);
-        if (running)
+        if (exibirSegundos)
             texto += TimeConverter.segundosAsString(segundos);
         valorHorasTxt.setText(texto);
 
+        destacaIntervaloSeMenorUmaHora(segundos);
+    }
+
+    private void destacaIntervaloSeMenorUmaHora(int segundos) {
         int umaHora = 3600;
-        if (segundos > 0 && segundos < umaHora) {
-            LinearLayout frame = (LinearLayout) findViewById(R.id.frameIntervalo);
+        LinearLayout frame = (LinearLayout) findViewById(R.id.frameIntervalo);
+        if (segundos > 0 && segundos < umaHora)
             frame.setBackgroundColor(getResources().getColor(R.color.colorError));
-            frame.invalidate();
-        }
+        else
+            frame.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+        frame.invalidate();
     }
 
     public void atualizaListaBatidas(String listaBatidas) {
