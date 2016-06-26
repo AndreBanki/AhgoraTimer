@@ -27,7 +27,8 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
 
     public void onRestoreInstanceState(Bundle state) {
         batidas = (Batidas)state.getSerializable("batidas");
-        view.atualizaListaBatidas(batidas.listaBatidasAsString());
+        if (batidas != null)
+            view.atualizaListaBatidas(batidas.listaBatidasAsString());
     }
 
     @Override
@@ -60,6 +61,7 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
                 view.toast("Código da empresa inválido. Este aplicativo é destinado apenas ao uso dos colaboradores da AltoQi.");
             else {
                 webServiceRunning = true;
+                view.iniciaIndicacaoProgresso();
                 BatidasTask task = new BatidasTask(this);
                 task.execute(pis);
             }
@@ -79,6 +81,7 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
             atualizaResultadoContagem(count);
         }
         webServiceRunning = false;
+        view.terminaIndicacaoProgresso();
     }
 
     private int valorCronometro() {

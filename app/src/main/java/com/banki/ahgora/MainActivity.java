@@ -142,4 +142,13 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
         TextView listaBatidasTxt = (TextView) findViewById(R.id.txtListaBatidas);
         listaBatidasTxt.setText("Batidas de hoje: " + listaBatidas);
     }
+
+    public void iniciaIndicacaoProgresso() {
+        atualizaListaBatidas("CONSULTANDO...");
+        startPauseBtn.setAlpha((float)0.5);
+    }
+
+    public void terminaIndicacaoProgresso() {
+        startPauseBtn.setAlpha((float)1);
+    }
 }
