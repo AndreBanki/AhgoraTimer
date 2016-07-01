@@ -26,6 +26,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tempo_trabalhado"
+                android:textSize="15sp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorPrimaryDark" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +62,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tempo_trabalhado"
+                android:text="@string/horasTarget"
+                android:id="@+id/horasTarget"
                 android:textSize="15sp"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/colorPrimaryDark" />

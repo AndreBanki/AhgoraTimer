@@ -11,6 +11,7 @@ import com.banki.ahgora.contador.ActivityHandler;
 import com.banki.ahgora.contador.ServiceActivity;
 import com.banki.ahgora.webservice.AhgoraWS;
 import com.banki.ahgora.webservice.BatidasTask;
+import com.banki.ahgora.webservice.TargetTask;
 
 import java.util.Calendar;
 
@@ -70,14 +71,18 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
             else {
                 webServiceRunning = true;
                 getView().iniciaIndicacaoProgresso();
-                BatidasTask task = new BatidasTask(this);
-                task.execute(pis);
+
+                BatidasTask taskAhgora = new BatidasTask(this);
+                taskAhgora.execute(pis);
+
+                TargetTask taskTarget = new TargetTask(this);
+                taskTarget.execute("3");
             }
         }
     }
 
     @Override
-    public void processFinish(Batidas result) {
+    public void processFinishAhgora(Batidas result) {
         batidas = result;
         if (batidas == null)
             getView().toast("Erro na comunicação com o serviço de batidas.");
@@ -88,6 +93,15 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
             atualizaContadorService(count);
             atualizaResultadoContagem(count);
         }
+        webServiceRunning = false;
+        getView().terminaIndicacaoProgresso();
+    }
+
+    @Override
+    public void processFinishTarget(float timeSpent) {
+        int count = (int)(timeSpent * 3600);
+        getView().atualizaHorasTarget(count);
+
         webServiceRunning = false;
         getView().terminaIndicacaoProgresso();
     }

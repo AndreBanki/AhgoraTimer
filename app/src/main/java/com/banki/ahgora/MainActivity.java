@@ -104,6 +104,13 @@ public class MainActivity extends ServiceActivity {
         frame.invalidate();
     }
 
+    public void atualizaHorasTarget(int count) {
+        TextView horasTarget = (TextView) findViewById(R.id.horasTarget);
+        horasTarget.setText(new StringBuilder().append(getResources().getString(R.string.horasTarget))
+                                               .append(TimeConverter.horasMinutosAsString(count))
+                                               .toString());
+    }
+
     public void atualizaListaBatidas(String listaBatidas) {
         TextView listaBatidasTxt = (TextView) findViewById(R.id.txtListaBatidas);
         listaBatidasTxt.setText(new StringBuilder().append(getResources().getString(R.string.batidas_hoje))

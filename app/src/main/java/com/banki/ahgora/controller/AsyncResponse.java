@@ -4,5 +4,7 @@ import com.banki.ahgora.model.Batidas;
 
 public interface AsyncResponse {
 
-    void processFinish(Batidas result);
+    void processFinishAhgora(Batidas result);
+
+    void processFinishTarget(float timeSpent);
 }

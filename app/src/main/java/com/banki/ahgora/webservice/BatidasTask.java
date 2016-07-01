@@ -22,7 +22,7 @@ public class BatidasTask extends AsyncTask<String, Void, Void> {
     }
 
     protected void onPostExecute(Void param) {
-        delegate.processFinish(batidas);
+        delegate.processFinishAhgora(batidas);
     }
 
 }
