@@ -10,4 +10,8 @@
     <string name="batidas_hoje">"Batidas de hoje: "</string>
     <string name="consultando">CONSULTANDO...</string>
     <string name="horasTarget">"Horas no Target: "</string>
+    <string name="erro_pis_vazio">Informe o seu PIS na tela de Configurações.</string>
+    <string name="erro_login_vazio">Informe o seu login no Target na tela de Configurações.</string>
+    <string name="erro_empresa_invalida">Código da empresa inválido. Este aplicativo é destinado apenas ao uso dos colaboradores da AltoQi.</string>
+    <string name="erro_comunicacao_Ahgora">Erro na comunicação com o serviço de batidas.</string>
 </resources>

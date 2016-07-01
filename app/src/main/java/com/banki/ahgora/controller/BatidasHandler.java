@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.banki.ahgora.MainActivity;
+import com.banki.ahgora.R;
 import com.banki.ahgora.model.Batida;
 import com.banki.ahgora.model.Batidas;
 import com.banki.ahgora.contador.ActivityHandler;
@@ -61,28 +62,39 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     }
 
     public void refreshDataFromWS() {
-        if (!webServiceAhgoraRunning) {
+        if (!webServiceAhgoraRunning && !webServiceTargetRunning) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(view.getApplicationContext());
             String pis = settings.getString("pis", "");
-            String empresa = settings.getString("empresa", "");
             String login = settings.getString("loginTarget", "");
-            if (pis.trim().isEmpty())
-                getView().toast("Informe o seu PIS na tela de Configurações.");
-            else if (login.trim().isEmpty())
-                getView().toast("Informe o seu login no Target na tela de Configurações.");
-            else if (!AhgoraWS.validaEmpresa(empresa))
-                getView().toast("Código da empresa inválido. Este aplicativo é destinado apenas ao uso dos colaboradores da AltoQi.");
-            else {
-                webServiceAhgoraRunning = true;
-                webServiceTargetRunning = true;
+
+            if (verificaDadosConfigurados(pis, login)) {
                 getView().iniciaIndicacaoProgresso();
 
+                webServiceAhgoraRunning = true;
                 BatidasTask taskAhgora = new BatidasTask(this);
                 taskAhgora.execute(pis);
 
+                webServiceTargetRunning = true;
                 TargetTask taskTarget = new TargetTask(this);
                 taskTarget.execute(login);
             }
+        }
+    }
+
+    private boolean verificaDadosConfigurados(String pis, String login) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(view.getApplicationContext());
+        String empresa = settings.getString("empresa", "");
+        if (pis.trim().isEmpty()) {
+            getView().toast(view.getString(R.string.erro_pis_vazio));
+            return false;
+        } else if (login.trim().isEmpty()) {
+            getView().toast(view.getString(R.string.erro_login_vazio));
+            return false;
+        } else if (!AhgoraWS.validaEmpresa(empresa)) {
+            getView().toast(view.getString(R.string.erro_empresa_invalida));
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -90,7 +102,7 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     public void processFinishAhgora(Batidas result) {
         batidas = result;
         if (batidas == null)
-            getView().toast("Erro na comunicação com o serviço de batidas.");
+            getView().toast(view.getString(R.string.erro_comunicacao_Ahgora));
         else {
             getView().atualizaListaBatidas(batidas.listaBatidasAsString());
 
