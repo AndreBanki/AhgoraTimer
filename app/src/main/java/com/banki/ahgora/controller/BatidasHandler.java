@@ -20,6 +20,8 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
 
     private Batidas batidas = new Batidas();
     private static boolean webServiceAhgoraRunning = false;
+
+    private int secondsCountTarget;
     private static boolean webServiceTargetRunning = false;
 
     public BatidasHandler(ServiceActivity view) {
@@ -33,6 +35,7 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     @Override
     public void onSaveInstanceState(Bundle state) {
         state.putSerializable("batidas", batidas);
+        state.putInt("countTarget", secondsCountTarget);
     }
 
     @Override
@@ -40,6 +43,9 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
         batidas = (Batidas)state.getSerializable("batidas");
         if (batidas != null)
             getView().atualizaListaBatidas(batidas.listaBatidasAsString());
+
+        secondsCountTarget = state.getInt("countTarget");
+        getView().atualizaHorasTarget(secondsCountTarget);
     }
 
     @Override
@@ -117,8 +123,8 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
 
     @Override
     public void processFinishTarget(float timeSpent) {
-        int count = (int)(timeSpent * 3600);
-        getView().atualizaHorasTarget(count);
+        secondsCountTarget = (int)(timeSpent * 3600);
+        getView().atualizaHorasTarget(secondsCountTarget);
 
         webServiceTargetRunning = false;
         if (!webServiceAhgoraRunning)
