@@ -105,10 +105,14 @@ public class MainActivity extends ServiceActivity {
     }
 
     public void atualizaHorasTarget(int count) {
+        atualizaCampoTarget(TimeConverter.horasMinutosAsString(count));
+    }
+
+    private void atualizaCampoTarget(String valor) {
         TextView horasTarget = (TextView) findViewById(R.id.horasTarget);
         horasTarget.setText(new StringBuilder().append(getResources().getString(R.string.horasTarget))
-                                               .append(TimeConverter.horasMinutosAsString(count))
-                                               .toString());
+                .append(valor)
+                .toString());
     }
 
     public void atualizaListaBatidas(String listaBatidas) {
@@ -120,6 +124,7 @@ public class MainActivity extends ServiceActivity {
 
     public void iniciaIndicacaoProgresso() {
         atualizaListaBatidas(getResources().getString(R.string.consultando));
+        atualizaCampoTarget(getResources().getString(R.string.consultando));
         refreshBtn.setAlpha((float)0.5);
     }
 

@@ -18,7 +18,8 @@ import java.util.Calendar;
 public class BatidasHandler extends ActivityHandler implements AsyncResponse {
 
     private Batidas batidas = new Batidas();
-    private static boolean webServiceRunning = false;
+    private static boolean webServiceAhgoraRunning = false;
+    private static boolean webServiceTargetRunning = false;
 
     public BatidasHandler(ServiceActivity view) {
         super(view);
@@ -60,7 +61,7 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
     }
 
     public void refreshDataFromWS() {
-        if (!webServiceRunning) {
+        if (!webServiceAhgoraRunning) {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(view.getApplicationContext());
             String pis = settings.getString("pis", "");
             String empresa = settings.getString("empresa", "");
@@ -72,7 +73,8 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
             else if (!AhgoraWS.validaEmpresa(empresa))
                 getView().toast("Código da empresa inválido. Este aplicativo é destinado apenas ao uso dos colaboradores da AltoQi.");
             else {
-                webServiceRunning = true;
+                webServiceAhgoraRunning = true;
+                webServiceTargetRunning = true;
                 getView().iniciaIndicacaoProgresso();
 
                 BatidasTask taskAhgora = new BatidasTask(this);
@@ -96,8 +98,9 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
             atualizaContadorService(count);
             atualizaResultadoContagem(count);
         }
-        webServiceRunning = false;
-        getView().terminaIndicacaoProgresso();
+        webServiceAhgoraRunning = false;
+        if (!webServiceTargetRunning)
+            getView().terminaIndicacaoProgresso();
     }
 
     @Override
@@ -105,8 +108,9 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
         int count = (int)(timeSpent * 3600);
         getView().atualizaHorasTarget(count);
 
-        webServiceRunning = false;
-        getView().terminaIndicacaoProgresso();
+        webServiceTargetRunning = false;
+        if (!webServiceAhgoraRunning)
+            getView().terminaIndicacaoProgresso();
     }
 
     private int valorCronometro() {

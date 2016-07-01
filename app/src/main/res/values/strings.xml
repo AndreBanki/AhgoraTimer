@@ -9,5 +9,5 @@
     <string name="tempo_intervalo">Tempo do intervalo:</string>
     <string name="batidas_hoje">"Batidas de hoje: "</string>
     <string name="consultando">CONSULTANDO...</string>
-    <string name="horasTarget">"Horas apontadas no Target: "</string>
+    <string name="horasTarget">"Horas no Target: "</string>
 </resources>
