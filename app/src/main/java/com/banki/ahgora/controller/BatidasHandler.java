@@ -64,8 +64,11 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(view.getApplicationContext());
             String pis = settings.getString("pis", "");
             String empresa = settings.getString("empresa", "");
+            String login = settings.getString("loginTarget", "");
             if (pis.trim().isEmpty())
                 getView().toast("Informe o seu PIS na tela de Configurações.");
+            else if (login.trim().isEmpty())
+                getView().toast("Informe o seu login no Target na tela de Configurações.");
             else if (!AhgoraWS.validaEmpresa(empresa))
                 getView().toast("Código da empresa inválido. Este aplicativo é destinado apenas ao uso dos colaboradores da AltoQi.");
             else {
@@ -76,7 +79,7 @@ public class BatidasHandler extends ActivityHandler implements AsyncResponse {
                 taskAhgora.execute(pis);
 
                 TargetTask taskTarget = new TargetTask(this);
-                taskTarget.execute("3");
+                taskTarget.execute(login);
             }
         }
     }

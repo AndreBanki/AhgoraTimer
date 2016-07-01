@@ -20,7 +20,10 @@ public class TimesWS extends TargetWS {
     public float getTimeSpent(String id) {
         URL url = montaRequest(id);
         JSONObject json = obtemResponse(url);
-        return parseJson(json);
+        if (json == null)
+            return 0;
+        else
+            return parseJson(json);
     }
 
     private URL montaRequest(String id) {

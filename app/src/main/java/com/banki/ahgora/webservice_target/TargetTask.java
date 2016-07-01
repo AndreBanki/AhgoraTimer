@@ -13,9 +13,16 @@ public class TargetTask  extends AsyncTask<String, Void, Float> {
     }
 
     protected Float doInBackground(String... params) {
-        String id = params[0];
-        TimesWS ws = new TimesWS();
-        return ws.getTimeSpent(id);
+        String login = params[0];
+
+        UsersWS userWS = new UsersWS();
+        String id = userWS.getUserId(login);
+        if (id == null)
+            return new Float(0);
+        else {
+            TimesWS ws = new TimesWS();
+            return ws.getTimeSpent(id);
+        }
     }
 
     protected void onPostExecute(Float timeSpent) {
