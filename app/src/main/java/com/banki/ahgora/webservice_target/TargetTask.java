@@ -1,4 +1,4 @@
-package com.banki.ahgora.webservice;
+package com.banki.ahgora.webservice_target;
 
 import android.os.AsyncTask;
 
@@ -14,7 +14,7 @@ public class TargetTask  extends AsyncTask<String, Void, Float> {
 
     protected Float doInBackground(String... params) {
         String id = params[0];
-        TargetWS ws = new TargetWS();
+        TimesWS ws = new TimesWS();
         return ws.getTimeSpent(id);
     }
 

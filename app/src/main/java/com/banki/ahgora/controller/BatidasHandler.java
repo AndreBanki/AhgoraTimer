@@ -11,7 +11,7 @@ import com.banki.ahgora.contador.ActivityHandler;
 import com.banki.ahgora.contador.ServiceActivity;
 import com.banki.ahgora.webservice.AhgoraWS;
 import com.banki.ahgora.webservice.BatidasTask;
-import com.banki.ahgora.webservice.TargetTask;
+import com.banki.ahgora.webservice_target.TargetTask;
 
 import java.util.Calendar;
 
