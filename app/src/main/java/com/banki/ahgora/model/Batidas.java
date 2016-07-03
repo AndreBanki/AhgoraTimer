@@ -47,7 +47,7 @@ public class Batidas implements Serializable {
             return inicioIntervalo().tempoDecorridoAte(fimIntervalo());
     }
 
-    public int horasJaTrabalhadas() {
+    public int segundosTrabalhados() {
         if (batidas.size() < 2)
             return 0;
         else if (batidas.size() < 4)
