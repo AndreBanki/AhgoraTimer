@@ -6,28 +6,17 @@ import android.support.v4.app.NotificationCompat;
 
 import com.banki.ahgora.R;
 import com.banki.ahgora.model.Batidas;
-
 import java.util.Calendar;
 
 public class NotificadorDiferencaApontamento {
 
-    private int secondsCountTarget;
-    private Batidas batidas;
-    private BatidasHandler handler;
-
-    public NotificadorDiferencaApontamento(BatidasHandler handler, Batidas batidas, int secondsCountTarget) {
-        this.handler = handler;
-        this.batidas = batidas;
-        this.secondsCountTarget = secondsCountTarget;
-    }
-
-    public void criaNotificacaoSeNecessario() {
-        float horasANotificar = horasNaNotificacaoTarget();
+    public void criaNotificacaoSeNecessario(Context context, Batidas batidas, int secondsCountTarget) {
+        float horasANotificar = horasNaNotificacaoTarget(batidas, secondsCountTarget);
         if (horasANotificar != 0)
-            criaNotificacaoTarget(handler.getApplicationContext(), horasANotificar);
+            criaNotificacaoTarget(context, horasANotificar);
     }
 
-    private float horasNaNotificacaoTarget() {
+    private float horasNaNotificacaoTarget(Batidas batidas, int secondsCountTarget) {
         if (batidas != null) {
             if (batidas.statusJornada() == Batidas.ENCERRADO || batidas.statusJornada() == Batidas.INTERVALO) {
                 float diferencaMinutos = (secondsCountTarget - batidas.segundosTrabalhados())/60;
@@ -44,7 +33,7 @@ public class NotificadorDiferencaApontamento {
                 "no apontamento de hoje.";
 
         NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
-                .setTicker(handler.getString(R.string.app_name))
+                .setTicker(context.getString(R.string.app_name))
                 .setSmallIcon(R.drawable.ic_alert_outline_white_24dp)
                 .setContentTitle("Apontamentos do Target")
                 .setContentText(mensagem)

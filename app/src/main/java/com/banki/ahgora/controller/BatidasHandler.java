@@ -51,7 +51,6 @@ public class BatidasHandler extends ActivityHandler {
         return view.getString(resId);
     }
 
-
     public void toastErrorMessage(int errorMessage) {
         getView().toast(view.getString(errorMessage));
     }
@@ -102,12 +101,11 @@ public class BatidasHandler extends ActivityHandler {
     }
 
     private void terminaIndicacaoProgresso() {
-        NotificadorDiferencaApontamento notificador = new NotificadorDiferencaApontamento(
-                this,
+        NotificadorDiferencaApontamento notificador = new NotificadorDiferencaApontamento();
+        notificador.criaNotificacaoSeNecessario(
+                view.getApplicationContext(),
                 ahgoraController.getBatidas(),
-                targetController.getSecondsCount()
-        );
-        notificador.criaNotificacaoSeNecessario();
+                targetController.getSecondsCount());
 
         getView().terminaIndicacaoProgresso();
     }
