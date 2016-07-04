@@ -13,11 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.banki.ahgora.controller.BatidasHandler;
+import com.banki.ahgora.controller.IAhgoraView;
+import com.banki.ahgora.controller.ITargetView;
 import com.banki.ahgora.model.TimeConverter;
 import com.banki.ahgora.contador.ServiceActivity;
 import com.banki.ahgora.settings.SettingsActivity;
 
-public class MainActivity extends ServiceActivity {
+public class MainActivity extends ServiceActivity implements ITargetView, IAhgoraView {
 
     private FloatingActionButton refreshBtn;
 
@@ -70,40 +72,20 @@ public class MainActivity extends ServiceActivity {
         t.show();
     }
 
-    public void atualizaHorasTrabalhadas(int segundos, boolean exibirSegundos) {
-        TextView horasMinutosTxt = (TextView) findViewById(R.id.horasMinutos);
-        horasMinutosTxt.setText(TimeConverter.horasMinutosAsString(segundos));
 
-        TextView segundosTxt = (TextView) findViewById(R.id.segundos);
-        if (exibirSegundos)
-            segundosTxt.setText(TimeConverter.segundosAsString(segundos));
-        else
-            segundosTxt.setText("");
+    public void iniciaIndicacaoProgresso() {
+        atualizaListaBatidas(getResources().getString(R.string.consultando));
+        atualizaCampoTarget(getResources().getString(R.string.consultando));
+        refreshBtn.setAlpha((float)0.5);
     }
 
-    public void atualizaIntervalo(int segundos, boolean exibirSegundos) {
-        TextView valorHorasTxt = (TextView) findViewById(R.id.valorHoras);
-        String texto = TimeConverter.horasMinutosAsString(segundos);
-        if (exibirSegundos)
-            texto += TimeConverter.segundosAsString(segundos);
-        valorHorasTxt.setText(texto);
-
-        destacaIntervaloSeMenorUmaHora(segundos);
+    public void terminaIndicacaoProgresso() {
+        refreshBtn.setAlpha((float)1);
     }
 
-    private void destacaIntervaloSeMenorUmaHora(int segundos) {
-        int umaHora = 3600;
-        LinearLayout frame = (LinearLayout) findViewById(R.id.frameIntervalo);
-        if (segundos > 0 && segundos < umaHora)
-            frame.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
-                                     R.color.colorError));
-        else
-            frame.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
-                                     R.color.colorPrimaryDark));
+    // ITargetView --------------------------------------
 
-        frame.invalidate();
-    }
-
+    @Override
     public void atualizaHorasTarget(int count) {
         atualizaCampoTarget(TimeConverter.horasMinutosAsString(count));
     }
@@ -115,6 +97,32 @@ public class MainActivity extends ServiceActivity {
                 .toString());
     }
 
+    // IAhgoraView ----------------------------------------
+
+    @Override
+    public void atualizaHorasTrabalhadas(int segundos, boolean exibirSegundos) {
+        TextView horasMinutosTxt = (TextView) findViewById(R.id.horasMinutos);
+        horasMinutosTxt.setText(TimeConverter.horasMinutosAsString(segundos));
+
+        TextView segundosTxt = (TextView) findViewById(R.id.segundos);
+        if (exibirSegundos)
+            segundosTxt.setText(TimeConverter.segundosAsString(segundos));
+        else
+            segundosTxt.setText("");
+    }
+
+    @Override
+    public void atualizaIntervalo(int segundos, boolean exibirSegundos) {
+        TextView valorHorasTxt = (TextView) findViewById(R.id.valorHoras);
+        String texto = TimeConverter.horasMinutosAsString(segundos);
+        if (exibirSegundos)
+            texto += TimeConverter.segundosAsString(segundos);
+        valorHorasTxt.setText(texto);
+
+        destacaIntervaloSeMenorUmaHora(segundos);
+    }
+
+    @Override
     public void atualizaListaBatidas(String listaBatidas) {
         TextView listaBatidasTxt = (TextView) findViewById(R.id.txtListaBatidas);
         listaBatidasTxt.setText(new StringBuilder().append(getResources().getString(R.string.batidas_hoje))
@@ -122,13 +130,17 @@ public class MainActivity extends ServiceActivity {
                                                    .toString());
     }
 
-    public void iniciaIndicacaoProgresso() {
-        atualizaListaBatidas(getResources().getString(R.string.consultando));
-        atualizaCampoTarget(getResources().getString(R.string.consultando));
-        refreshBtn.setAlpha((float)0.5);
+    private void destacaIntervaloSeMenorUmaHora(int segundos) {
+        int umaHora = 3600;
+        LinearLayout frame = (LinearLayout) findViewById(R.id.frameIntervalo);
+        if (segundos > 0 && segundos < umaHora)
+            frame.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                    R.color.colorError));
+        else
+            frame.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                    R.color.colorPrimaryDark));
+
+        frame.invalidate();
     }
 
-    public void terminaIndicacaoProgresso() {
-        refreshBtn.setAlpha((float)1);
-    }
 }

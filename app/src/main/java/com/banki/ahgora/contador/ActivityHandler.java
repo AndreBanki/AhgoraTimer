@@ -23,6 +23,10 @@ public class ActivityHandler extends Handler {
         atualizaResultadoContagem(contadorService.getCount());
     }
 
+    public ContadorService getContadorService() {
+        return contadorService;
+    }
+
     @Override
     public void handleMessage(Message msg) {
         Bundle envelope = msg.getData();

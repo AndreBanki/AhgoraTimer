@@ -2,13 +2,11 @@ package com.banki.ahgora.webservice_target;
 
 import android.os.AsyncTask;
 
-import com.banki.ahgora.controller.AsyncResponse;
-
 public class TargetTask  extends AsyncTask<String, Void, Float> {
 
-    public AsyncResponse delegate = null;
+    public ITargetResponse delegate = null;
 
-    public TargetTask(AsyncResponse asyncResponse) {
+    public TargetTask(ITargetResponse asyncResponse) {
         delegate = asyncResponse;
     }
 
@@ -26,7 +24,7 @@ public class TargetTask  extends AsyncTask<String, Void, Float> {
     }
 
     protected void onPostExecute(Float timeSpent) {
-        delegate.processFinishTarget(timeSpent);
+        delegate.processFinish(timeSpent);
     }
 
 }

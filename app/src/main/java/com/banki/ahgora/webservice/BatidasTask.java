@@ -2,15 +2,14 @@ package com.banki.ahgora.webservice;
 
 import android.os.AsyncTask;
 
-import com.banki.ahgora.controller.AsyncResponse;
 import com.banki.ahgora.model.Batidas;
 
 public class BatidasTask extends AsyncTask<String, Void, Void> {
 
-    public AsyncResponse delegate = null;
+    public IAhgoraResponse delegate = null;
     private Batidas batidas = null;
 
-    public BatidasTask(AsyncResponse asyncResponse) {
+    public BatidasTask(IAhgoraResponse asyncResponse) {
         delegate = asyncResponse;
     }
 
@@ -22,7 +21,7 @@ public class BatidasTask extends AsyncTask<String, Void, Void> {
     }
 
     protected void onPostExecute(Void param) {
-        delegate.processFinishAhgora(batidas);
+        delegate.processFinish(batidas);
     }
 
 }
