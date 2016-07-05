@@ -1,4 +1,4 @@
-package com.banki.ahgora.settings;
+package com.banki.main.settings;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

@@ -1,15 +1,17 @@
-package com.banki.ahgora.controller;
+package com.banki.main.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import com.banki.ahgora.MainActivity;
+import com.banki.main.MainActivity;
 import com.banki.ahgora.R;
-import com.banki.ahgora.contador.ActivityHandler;
-import com.banki.ahgora.contador.ServiceActivity;
+import com.banki.main.contador.ActivityHandler;
+import com.banki.main.contador.ServiceActivity;
+import com.banki.ahgora.controller.AhgoraController;
 import com.banki.ahgora.webservice.AhgoraWS;
+import com.banki.targetprocess.controller.TargetController;
 
 public class BatidasHandler extends ActivityHandler {
 

@@ -1,4 +1,4 @@
-package com.banki.ahgora;
+package com.banki.main;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -12,12 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.banki.ahgora.controller.BatidasHandler;
+import com.banki.ahgora.R;
+import com.banki.main.controller.BatidasHandler;
 import com.banki.ahgora.controller.IAhgoraView;
-import com.banki.ahgora.controller.ITargetView;
+import com.banki.targetprocess.controller.ITargetView;
 import com.banki.ahgora.model.TimeConverter;
-import com.banki.ahgora.contador.ServiceActivity;
-import com.banki.ahgora.settings.SettingsActivity;
+import com.banki.main.contador.ServiceActivity;
+import com.banki.main.settings.SettingsActivity;
 
 public class MainActivity extends ServiceActivity implements ITargetView, IAhgoraView {
 

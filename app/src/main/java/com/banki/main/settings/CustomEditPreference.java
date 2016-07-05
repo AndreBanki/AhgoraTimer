@@ -1,4 +1,4 @@
-package com.banki.ahgora.settings;
+package com.banki.main.settings;
 
 import android.content.Context;
 import android.preference.EditTextPreference;

@@ -1,4 +1,4 @@
-package com.banki.ahgora.controller;
+package com.banki.targetprocess.controller;
 
 public interface ITargetView {
 

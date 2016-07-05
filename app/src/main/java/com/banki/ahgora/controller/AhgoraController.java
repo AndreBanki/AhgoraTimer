@@ -7,6 +7,7 @@ import com.banki.ahgora.model.Batida;
 import com.banki.ahgora.model.Batidas;
 import com.banki.ahgora.webservice.BatidasTask;
 import com.banki.ahgora.webservice.IAhgoraResponse;
+import com.banki.main.controller.BatidasHandler;
 
 import java.util.Calendar;
 

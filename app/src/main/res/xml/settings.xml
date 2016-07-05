@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.banki.ahgora.settings.CustomEditPreference
+    <com.banki.main.settings.CustomEditPreference
         android:key="pis"
         android:id="@+id/pis"
         android:title="PIS (apenas dígitos)"
@@ -11,7 +11,7 @@
         android:singleLine="true"
         android:maxLines="1" />
 
-    <com.banki.ahgora.settings.CustomEditPreference
+    <com.banki.main.settings.CustomEditPreference
         android:key="empresa"
         android:id="@+id/pis"
         android:title="Empresa"
@@ -22,7 +22,7 @@
         android:singleLine="true"
         android:maxLines="1" />
 
-    <com.banki.ahgora.settings.CustomEditPreference
+    <com.banki.main.settings.CustomEditPreference
         android:key="loginTarget"
         android:id="@+id/loginTarget"
         android:title="Login no Target"

@@ -1,4 +1,4 @@
-package com.banki.ahgora.contador;
+package com.banki.main.contador;
 
 import android.os.Bundle;
 import android.os.Handler;

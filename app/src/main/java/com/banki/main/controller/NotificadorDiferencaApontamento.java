@@ -1,4 +1,4 @@
-package com.banki.ahgora.controller;
+package com.banki.main.controller;
 
 import android.app.NotificationManager;
 import android.content.Context;

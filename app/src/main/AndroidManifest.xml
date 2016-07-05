@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.banki.main.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,12 +19,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.banki.ahgora.settings.SettingsActivity"
+            android:name="com.banki.main.settings.SettingsActivity"
             android:label="@string/action_settings" >
         </activity>
 
         <service
-            android:name=".contador.ContadorService"
+            android:name="com.banki.main.contador.ContadorService"
             android:enabled="true"
             android:exported="true" >
         </service>

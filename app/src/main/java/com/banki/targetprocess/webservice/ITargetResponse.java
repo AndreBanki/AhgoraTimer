@@ -1,4 +1,4 @@
-package com.banki.ahgora.webservice_target;
+package com.banki.targetprocess.webservice;
 
 public interface ITargetResponse {
 

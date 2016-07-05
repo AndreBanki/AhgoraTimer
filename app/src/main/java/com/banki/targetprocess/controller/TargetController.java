@@ -1,9 +1,10 @@
-package com.banki.ahgora.controller;
+package com.banki.targetprocess.controller;
 
 import android.os.Bundle;
 
-import com.banki.ahgora.webservice_target.ITargetResponse;
-import com.banki.ahgora.webservice_target.TargetTask;
+import com.banki.main.controller.BatidasHandler;
+import com.banki.targetprocess.webservice.ITargetResponse;
+import com.banki.targetprocess.webservice.TargetTask;
 
 public class TargetController implements ITargetResponse {
 
