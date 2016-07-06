@@ -8,7 +8,7 @@ import com.banki.ahgora.R;
 import com.banki.ahgora.model.Batidas;
 import java.util.Calendar;
 
-public class NotificadorDiferencaApontamento {
+public class DiferencaApontamentoNotifier {
 
     public void criaNotificacaoSeNecessario(Context context, Batidas batidas, int secondsCountTarget) {
         float horasANotificar = horasNaNotificacaoTarget(batidas, secondsCountTarget);

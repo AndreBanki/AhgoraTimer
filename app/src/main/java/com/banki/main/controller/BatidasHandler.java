@@ -1,6 +1,5 @@
 package com.banki.main.controller;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -45,15 +44,7 @@ public class BatidasHandler extends ActivityHandler {
         ahgoraController.atualizaResultadoContagem(count);
     }
 
-    public Context getApplicationContext() {
-        return view.getApplicationContext();
-    }
-
-    public String getString(int resId) {
-        return view.getString(resId);
-    }
-
-    public void toastErrorMessage(int errorMessage) {
+   public void toastErrorMessage(int errorMessage) {
         getView().toast(view.getString(errorMessage));
     }
 
@@ -103,11 +94,17 @@ public class BatidasHandler extends ActivityHandler {
     }
 
     private void terminaIndicacaoProgresso() {
-        NotificadorDiferencaApontamento notificador = new NotificadorDiferencaApontamento();
+        DiferencaApontamentoNotifier notificador = new DiferencaApontamentoNotifier();
         notificador.criaNotificacaoSeNecessario(
                 view.getApplicationContext(),
                 ahgoraController.getBatidas(),
                 targetController.getSecondsCount());
+
+        FinalIntervaloNotifier notificador2 = new FinalIntervaloNotifier();
+        notificador2.defineAlarmeSeNecessario(
+                view.getApplicationContext(),
+                ahgoraController.getBatidas()
+        );
 
         getView().terminaIndicacaoProgresso();
     }

@@ -8,7 +8,7 @@ import com.banki.ahgora.R;
 
 public class SettingsFragment extends PreferenceFragment  implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private final String[] mAutoSummaryFields = { "pis", "empresa", "loginTarget"};
+    private final String[] mAutoSummaryFields = { "pis", "empresa", "loginTarget", "avisarMinutosAntes"};
     private final int mEntryCount = mAutoSummaryFields.length;
     private CustomEditPreference[] mPreferenceEntries;
 

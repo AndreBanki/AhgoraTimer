@@ -33,4 +33,15 @@
         android:singleLine="true"
         android:maxLines="1" />
 
+    <com.banki.main.settings.CustomEditPreference
+        android:key="avisarMinutosAntes"
+        android:id="@+id/avisarMinutosAntes"
+        android:title="Avisar final do intervalo (minutos)"
+        android:summary="Avisar X minutos antes do final do intervalo (em branco desativa):"
+        android:defaultValue="5"
+        android:selectAllOnFocus="true"
+        android:inputType="text"
+        android:singleLine="true"
+        android:maxLines="1" />
+
 </PreferenceScreen>
