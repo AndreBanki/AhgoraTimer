@@ -1,5 +1,6 @@
 package com.banki.main.controller;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
@@ -38,6 +39,7 @@ public class DiferencaApontamentoNotifier {
                 .setContentTitle("Apontamentos do Target")
                 .setContentText(mensagem)
                 .setWhen(Calendar.getInstance().getTimeInMillis())
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                 .setAutoCancel(true);
 
         NotificationManager nManager;
