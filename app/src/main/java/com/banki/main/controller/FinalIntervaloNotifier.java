@@ -17,18 +17,20 @@ public class FinalIntervaloNotifier {
 
     public void defineAlarmeSeNecessario(Context context, Batidas batidas) {
         if (batidas.statusJornada() == Batidas.INTERVALO) {
-            PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(context, batidas);
-
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             String avisarMinutosAntes = settings.getString("avisarMinutosAntes", "5");
+
             if (!avisarMinutosAntes.trim().isEmpty()) {
                 Batida batidaRef = batidas.ultimaBatida();
                 Calendar horaAviso = batidaRef.getAsDate();
                 int minutosAntes = Integer.valueOf(avisarMinutosAntes);
                 horaAviso.add(Calendar.MINUTE, (60 - minutosAntes));
 
-                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, horaAviso.getTimeInMillis(), pendingIt);
+                if (horaAviso.after(Calendar.getInstance())) {
+                    PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(context, batidas);
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, horaAviso.getTimeInMillis(), pendingIt);
+                }
             }
         }
     }
