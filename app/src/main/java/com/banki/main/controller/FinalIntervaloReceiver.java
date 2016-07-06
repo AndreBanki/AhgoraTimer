@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import com.banki.ahgora.model.Batida;
+import com.banki.ahgora.model.Batidas;
 import com.banki.main.MainActivity;
 import com.banki.ahgora.R;
 
@@ -18,18 +19,20 @@ public class FinalIntervaloReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Batida batidaRef = (Batida) intent.getSerializableExtra("batidaRef");
+        Batidas batidas = (Batidas) intent.getSerializableExtra("batidas");
 
+        Batida batidaRef = batidas.ultimaBatida();
         Calendar horaAviso = batidaRef.getAsDate();
         horaAviso.add(Calendar.MINUTE, 60);
 
-        PendingIntent pendingIt = criaIntentQueSeraDisparadoPelaNotificacao(context);
+        PendingIntent pendingIt = criaIntentQueSeraDisparadoPelaNotificacao(context, batidas);
         criaNotificacao(context, pendingIt, horaAviso);
     }
 
-    private PendingIntent criaIntentQueSeraDisparadoPelaNotificacao(Context context) {
+    private PendingIntent criaIntentQueSeraDisparadoPelaNotificacao(Context context, Batidas batidas) {
         Intent forwardIt = new Intent(context, MainActivity.class);
         forwardIt.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        forwardIt.putExtra("batidas", batidas);
 
         final int requestCode = R.string.app_name;
         return PendingIntent.getActivity(

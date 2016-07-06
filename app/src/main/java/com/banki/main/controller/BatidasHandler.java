@@ -1,5 +1,6 @@
 package com.banki.main.controller;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -42,6 +43,10 @@ public class BatidasHandler extends ActivityHandler {
     @Override
     protected void atualizaResultadoContagem(int count) {
         ahgoraController.atualizaResultadoContagem(count);
+    }
+
+    public void trataAberturaViaNotificacao(Intent intent) {
+        ahgoraController.trataAberturaViaNotificacao(intent);
     }
 
    public void toastErrorMessage(int errorMessage) {

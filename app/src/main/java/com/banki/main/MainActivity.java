@@ -39,6 +39,8 @@ public class MainActivity extends ServiceActivity implements ITargetView, IAhgor
                 batidasHandler().refreshDataFromWS();
             }
         });
+
+        batidasHandler().trataAberturaViaNotificacao(getIntent());
     }
 
     @Override

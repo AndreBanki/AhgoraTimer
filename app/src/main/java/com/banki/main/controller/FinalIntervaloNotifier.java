@@ -17,12 +17,12 @@ public class FinalIntervaloNotifier {
 
     public void defineAlarmeSeNecessario(Context context, Batidas batidas) {
         if (batidas.statusJornada() == Batidas.INTERVALO) {
-            Batida batidaRef = batidas.ultimaBatida();
-            PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(context, batidaRef);
+            PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(context, batidas);
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             String avisarMinutosAntes = settings.getString("avisarMinutosAntes", "5");
             if (!avisarMinutosAntes.trim().isEmpty()) {
+                Batida batidaRef = batidas.ultimaBatida();
                 Calendar horaAviso = batidaRef.getAsDate();
                 int minutosAntes = Integer.valueOf(avisarMinutosAntes);
                 horaAviso.add(Calendar.MINUTE, (60 - minutosAntes));
@@ -33,9 +33,9 @@ public class FinalIntervaloNotifier {
         }
     }
 
-    private PendingIntent criaIntentQueSeraExecutadoPeloAlarme(Context context, Batida batidaRef) {
+    private PendingIntent criaIntentQueSeraExecutadoPeloAlarme(Context context, Batidas batidas) {
         Intent intent = new Intent("ALERTA_INTERVALO");
-        intent.putExtra("batidaRef", batidaRef);
+        intent.putExtra("batidas", batidas);
 
         final int requestCode = R.string.app_name;
         return PendingIntent.getBroadcast(

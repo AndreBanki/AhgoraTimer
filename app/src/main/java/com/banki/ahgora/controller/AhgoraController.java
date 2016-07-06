@@ -1,5 +1,7 @@
 package com.banki.ahgora.controller;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.banki.ahgora.R;
@@ -34,6 +36,12 @@ public class AhgoraController implements IAhgoraResponse {
 
     public void onRestoreInstanceState(Bundle state) {
         batidas = (Batidas) state.getSerializable("batidas");
+        if (batidas != null)
+            view.atualizaListaBatidas(batidas.listaBatidasAsString());
+    }
+
+    public void trataAberturaViaNotificacao(Intent intent) {
+        batidas = (Batidas) intent.getSerializableExtra("batidas");
         if (batidas != null)
             view.atualizaListaBatidas(batidas.listaBatidasAsString());
     }
