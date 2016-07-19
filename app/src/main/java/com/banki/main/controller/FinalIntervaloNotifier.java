@@ -22,21 +22,22 @@ public class FinalIntervaloNotifier {
 
     public FinalIntervaloNotifier(Context context) {
         this.context = context;
-        loadSettings(context);
+        loadSettings();
     }
 
     public void defineAlarmeSeNecessario(Batidas batidas) {
         if (deveVerificarAlarme(batidas)) {
             Calendar horaAviso = horaAviso(batidas);
-            if (horaAviso.after(Calendar.getInstance())) {
-                PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(context, batidas);
+            Calendar horaAtual = Calendar.getInstance();
+            if (horaAviso.after(horaAtual)) {
+                PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(batidas, horaAviso);
                 AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, horaAviso.getTimeInMillis(), pendingIt);
             }
         }
     }
 
-    private void loadSettings(Context context) {
+    private void loadSettings() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 
         String avisoEntry = settings.getString("avisoFinalIntervalo", "5");
@@ -59,9 +60,10 @@ public class FinalIntervaloNotifier {
         return horaAviso;
     }
 
-    private PendingIntent criaIntentQueSeraExecutadoPeloAlarme(Context context, Batidas batidas) {
+    private PendingIntent criaIntentQueSeraExecutadoPeloAlarme(Batidas batidas, Calendar horaAviso) {
         Intent intent = new Intent("ALERTA_INTERVALO");
         intent.putExtra("batidas", batidas);
+        intent.putExtra("horaAviso", horaAviso);
 
         final int requestCode = R.string.app_name;
         return PendingIntent.getBroadcast(

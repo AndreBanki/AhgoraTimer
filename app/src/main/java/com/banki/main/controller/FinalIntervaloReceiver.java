@@ -20,10 +20,7 @@ public class FinalIntervaloReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Batidas batidas = (Batidas) intent.getSerializableExtra("batidas");
-
-        Batida batidaRef = batidas.ultimaBatida();
-        Calendar horaAviso = batidaRef.getAsDate();
-        horaAviso.add(Calendar.MINUTE, 60);
+        Calendar horaAviso = (Calendar) intent.getSerializableExtra("horaAviso");
 
         PendingIntent pendingIt = criaIntentQueSeraDisparadoPelaNotificacao(context, batidas);
         criaNotificacao(context, pendingIt, horaAviso);
