@@ -1,47 +1,67 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.banki.main.settings.CustomEditPreference
-        android:key="pis"
-        android:id="@+id/pis"
-        android:title="PIS (apenas dígitos)"
-        android:summary="PIS:"
-        android:defaultValue=""
-        android:selectAllOnFocus="true"
-        android:inputType="text"
-        android:singleLine="true"
-        android:maxLines="1" />
+    <PreferenceCategory
+        android:title="Ahgora"
+        android:key="ahgora_settings">
 
-    <com.banki.main.settings.CustomEditPreference
-        android:key="empresa"
-        android:id="@+id/pis"
-        android:title="Empresa"
-        android:summary="Código da empresa:"
-        android:defaultValue=""
-        android:selectAllOnFocus="true"
-        android:inputType="text"
-        android:singleLine="true"
-        android:maxLines="1" />
+        <EditTextPreference
+            android:key="pis"
+            android:id="@+id/pis"
+            android:title="PIS (apenas dígitos)"
+            android:summary=""
+            android:defaultValue=""
+            android:selectAllOnFocus="true"
+            android:inputType="text"
+            android:singleLine="true"
+            android:maxLines="1" />
 
-    <com.banki.main.settings.CustomEditPreference
-        android:key="loginTarget"
-        android:id="@+id/loginTarget"
-        android:title="Login no Target"
-        android:summary="Login no TargetProcess:"
-        android:defaultValue=""
-        android:selectAllOnFocus="true"
-        android:inputType="text"
-        android:singleLine="true"
-        android:maxLines="1" />
+        <EditTextPreference
+            android:key="empresa"
+            android:id="@+id/empresa"
+            android:title="Código da empresa"
+            android:summary=""
+            android:defaultValue=""
+            android:selectAllOnFocus="true"
+            android:inputType="text"
+            android:singleLine="true"
+            android:maxLines="1" />
+        </PreferenceCategory>
 
-    <com.banki.main.settings.CustomEditPreference
-        android:key="avisarMinutosAntes"
-        android:id="@+id/avisarMinutosAntes"
-        android:title="Avisar final do intervalo (minutos)"
-        android:summary="Avisar X minutos antes do final do intervalo (em branco desativa):"
-        android:defaultValue="5"
-        android:selectAllOnFocus="true"
-        android:inputType="text"
-        android:singleLine="true"
-        android:maxLines="1" />
+    <PreferenceCategory
+        android:title="TargetProcess"
+        android:key="targetprocess_settings">
+
+        <EditTextPreference
+            android:key="loginTarget"
+            android:id="@+id/loginTarget"
+            android:title="Login"
+            android:summary=""
+            android:defaultValue=""
+            android:selectAllOnFocus="true"
+            android:inputType="text"
+            android:singleLine="true"
+            android:maxLines="1" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Notificações"
+        android:key="notification_settings">
+
+        <ListPreference
+            android:key="jornadaTrabalho"
+            android:title="Jornada de trabalho"
+            android:entries="@array/jornadaTrabalho"
+            android:entryValues="@array/jornadaTrabalhoValues"
+            android:defaultValue="8" />
+
+        <ListPreference
+            android:key="avisoFinalIntervalo"
+            android:title="Final do intervalo"
+            android:entries="@array/avisarMinutosAntes"
+            android:entryValues="@array/avisarMinutosAntesValues"
+            android:defaultValue="5" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

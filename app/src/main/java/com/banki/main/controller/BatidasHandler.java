@@ -99,17 +99,12 @@ public class BatidasHandler extends ActivityHandler {
     }
 
     private void terminaIndicacaoProgresso() {
-        DiferencaApontamentoNotifier notificador = new DiferencaApontamentoNotifier();
-        notificador.criaNotificacaoSeNecessario(
-                view.getApplicationContext(),
-                ahgoraController.getBatidas(),
-                targetController.getSecondsCount());
+        DiferencaApontamentoNotifier notificador = new DiferencaApontamentoNotifier(view.getApplicationContext());
+        notificador.criaNotificacaoSeNecessario(ahgoraController.getBatidas(),
+                                                targetController.getSecondsCount());
 
-        FinalIntervaloNotifier notificador2 = new FinalIntervaloNotifier();
-        notificador2.defineAlarmeSeNecessario(
-                view.getApplicationContext(),
-                ahgoraController.getBatidas()
-        );
+        FinalIntervaloNotifier notificador2 = new FinalIntervaloNotifier(view.getApplicationContext());
+        notificador2.defineAlarmeSeNecessario(ahgoraController.getBatidas());
 
         getView().terminaIndicacaoProgresso();
     }

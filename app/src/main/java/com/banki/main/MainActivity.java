@@ -1,6 +1,8 @@
 package com.banki.main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -134,9 +136,12 @@ public class MainActivity extends ServiceActivity implements ITargetView, IAhgor
     }
 
     private void destacaIntervaloSeMenorUmaHora(int segundos) {
-        int umaHora = 3600;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String jornadaEntry = settings.getString("jornadaTrabalho", "8");
+        int segundosDuracaoIntervalo = jornadaEntry.equals("8") ? 60*60 : 60*15;
+
         LinearLayout frame = (LinearLayout) findViewById(R.id.frameIntervalo);
-        if (segundos > 0 && segundos < umaHora)
+        if (segundos > 0 && segundos < segundosDuracaoIntervalo)
             frame.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
                     R.color.colorError));
         else

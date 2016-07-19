@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="jornadaTrabalho">
+        <item name="6">6 horas</item>
+        <item name="8">8 horas</item>
+    </string-array>
+    <string-array name="jornadaTrabalhoValues">
+        <item name="6">6</item>
+        <item name="8">8</item>
+    </string-array>
+
+    <string-array name="avisarMinutosAntes">
+        <item name="15">15 minutos antes</item>
+        <item name="10">10 minutos antes</item>
+        <item name="5">5 minutos antes</item>
+        <item name="0">Na hora</item>
+        <item name="NOT">Não avisar</item>
+    </string-array>
+    <string-array name="avisarMinutosAntesValues">
+        <item name="15">15</item>
+        <item name="10">10</item>
+        <item name="5">5</item>
+        <item name="0">0</item>
+        <item name="NOT"></item>
+    </string-array>
+
+</resources>

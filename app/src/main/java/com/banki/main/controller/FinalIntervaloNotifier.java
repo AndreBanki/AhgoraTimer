@@ -15,24 +15,48 @@ import java.util.Calendar;
 
 public class FinalIntervaloNotifier {
 
-    public void defineAlarmeSeNecessario(Context context, Batidas batidas) {
-        if (batidas.statusJornada() == Batidas.INTERVALO) {
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-            String avisarMinutosAntes = settings.getString("avisarMinutosAntes", "5");
+    private boolean avisarFinalIntervalo;
+    private int minutosAntesIntervalo;
+    private int minutosDuracaoIntervalo;
+    Context context;
 
-            if (!avisarMinutosAntes.trim().isEmpty()) {
-                Batida batidaRef = batidas.ultimaBatida();
-                Calendar horaAviso = batidaRef.getAsDate();
-                int minutosAntes = Integer.valueOf(avisarMinutosAntes);
-                horaAviso.add(Calendar.MINUTE, (60 - minutosAntes));
+    public FinalIntervaloNotifier(Context context) {
+        this.context = context;
+        loadSettings(context);
+    }
 
-                if (horaAviso.after(Calendar.getInstance())) {
-                    PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(context, batidas);
-                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, horaAviso.getTimeInMillis(), pendingIt);
-                }
+    public void defineAlarmeSeNecessario(Batidas batidas) {
+        if (deveVerificarAlarme(batidas)) {
+            Calendar horaAviso = horaAviso(batidas);
+            if (horaAviso.after(Calendar.getInstance())) {
+                PendingIntent pendingIt = criaIntentQueSeraExecutadoPeloAlarme(context, batidas);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, horaAviso.getTimeInMillis(), pendingIt);
             }
         }
+    }
+
+    private void loadSettings(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+
+        String avisoEntry = settings.getString("avisoFinalIntervalo", "5");
+        avisarFinalIntervalo = !avisoEntry.isEmpty();
+        minutosAntesIntervalo = avisarFinalIntervalo ? Integer.valueOf(avisoEntry) : 0;
+
+        String jornadaEntry = settings.getString("jornadaTrabalho", "8");
+        minutosDuracaoIntervalo = jornadaEntry.equals("8") ? 60 : 15;
+    }
+
+    private boolean deveVerificarAlarme(Batidas batidas) {
+        return avisarFinalIntervalo &&
+               batidas.statusJornada() == Batidas.INTERVALO;
+    }
+
+    private Calendar horaAviso(Batidas batidas) {
+        Batida batidaRef = batidas.ultimaBatida();
+        Calendar horaAviso = batidaRef.getAsDate();
+        horaAviso.add(Calendar.MINUTE, (minutosDuracaoIntervalo - minutosAntesIntervalo));
+        return horaAviso;
     }
 
     private PendingIntent criaIntentQueSeraExecutadoPeloAlarme(Context context, Batidas batidas) {

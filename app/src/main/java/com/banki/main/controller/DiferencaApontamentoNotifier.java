@@ -11,10 +11,16 @@ import java.util.Calendar;
 
 public class DiferencaApontamentoNotifier {
 
-    public void criaNotificacaoSeNecessario(Context context, Batidas batidas, int secondsCountTarget) {
+    Context context;
+
+    public DiferencaApontamentoNotifier(Context context) {
+        this.context = context;
+    }
+
+    public void criaNotificacaoSeNecessario(Batidas batidas, int secondsCountTarget) {
         float horasANotificar = horasNaNotificacaoTarget(batidas, secondsCountTarget);
         if (horasANotificar != 0)
-            criaNotificacaoTarget(context, horasANotificar);
+            criaNotificacaoTarget(horasANotificar);
     }
 
     private float horasNaNotificacaoTarget(Batidas batidas, int secondsCountTarget) {
@@ -28,7 +34,7 @@ public class DiferencaApontamentoNotifier {
         return 0;
     }
 
-    private void criaNotificacaoTarget(Context context, float horasANotificar) {
+    private void criaNotificacaoTarget(float horasANotificar) {
         String mensagem = String.format("%1$.2f h ",Math.abs(horasANotificar)) +
                 (horasANotificar > 0 ? "sobrando " : "faltando ") +
                 "no apontamento de hoje.";
