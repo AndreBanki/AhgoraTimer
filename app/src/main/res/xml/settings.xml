@@ -62,6 +62,13 @@
             android:entryValues="@array/avisarMinutosAntesValues"
             android:defaultValue="5" />
 
+        <ListPreference
+            android:key="avisoFinalExpediente"
+            android:title="Final do expediente"
+            android:entries="@array/avisarMinutosAntes"
+            android:entryValues="@array/avisarMinutosAntesValues"
+            android:defaultValue="" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -15,7 +15,7 @@ import com.banki.ahgora.R;
 
 import java.util.Calendar;
 
-public class FinalIntervaloReceiver extends BroadcastReceiver {
+public class BatidasReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -23,7 +23,16 @@ public class FinalIntervaloReceiver extends BroadcastReceiver {
         Calendar horaAviso = (Calendar) intent.getSerializableExtra("horaAviso");
 
         PendingIntent pendingIt = criaIntentQueSeraDisparadoPelaNotificacao(context, batidas);
-        criaNotificacao(context, pendingIt, horaAviso);
+
+        String titulo, mensagem;
+        if (batidas.statusJornada() == Batidas.INTERVALO) {
+            titulo = "Final do intervalo";
+            mensagem = "O intervalo do almoço está acabando";
+        } else {
+            titulo = "Final do expediente";
+            mensagem = "O expediente de trabalho está acabando";
+        }
+        criaNotificacao(context, pendingIt, horaAviso, titulo, mensagem);
     }
 
     private PendingIntent criaIntentQueSeraDisparadoPelaNotificacao(Context context, Batidas batidas) {
@@ -39,12 +48,13 @@ public class FinalIntervaloReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void criaNotificacao(Context context, PendingIntent pendingIt, Calendar horaAviso) {
+    private void criaNotificacao(Context context, PendingIntent pendingIt, Calendar horaAviso,
+                                 String titulo, String mensagem) {
         NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
                 .setTicker(context.getString(R.string.app_name))
                 .setSmallIcon(R.drawable.ic_alarm_white_24dp)
-                .setContentTitle("Final do intervalo")
-                .setContentText("O intervalo do almoço está acabando")
+                .setContentTitle(titulo)
+                .setContentText(mensagem)
                 .setContentIntent(pendingIt)
                 .setWhen(horaAviso.getTimeInMillis())
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)

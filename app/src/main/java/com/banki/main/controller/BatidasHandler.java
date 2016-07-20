@@ -106,6 +106,9 @@ public class BatidasHandler extends ActivityHandler {
         FinalIntervaloNotifier notificador2 = new FinalIntervaloNotifier(view.getApplicationContext());
         notificador2.defineAlarmeSeNecessario(ahgoraController.getBatidas());
 
+        FinalExpedienteNotifier notificador3 = new FinalExpedienteNotifier(view.getApplicationContext());
+        notificador3.defineAlarmeSeNecessario(ahgoraController.getBatidas());
+
         getView().terminaIndicacaoProgresso();
     }
 }

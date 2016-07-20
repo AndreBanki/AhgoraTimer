@@ -29,7 +29,7 @@
             android:exported="true" >
         </service>
 
-        <receiver android:name="com.banki.main.controller.FinalIntervaloReceiver">
+        <receiver android:name="com.banki.main.controller.BatidasReceiver">
             <intent-filter>
                 <action android:name="ALERTA_INTERVALO" />
             </intent-filter>
